@@ -3,6 +3,11 @@ name = "bullet"
 version = "0.0.1"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 
+[[bin]]
+name = "bullet"
+test = false
+doc = false
+
 [dependencies]
 sqlite = "*"
 threed-ice = "*"
