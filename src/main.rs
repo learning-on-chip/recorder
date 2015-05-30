@@ -1,7 +1,9 @@
 extern crate bullet;
 
-use std::{env, process, mem};
-use std::default::Default;
+use std::{env, process};
+use std::fmt::Display;
+
+use bullet::Options;
 
 const USAGE: &'static str = "
 Usage: bullet [options]
@@ -11,25 +13,27 @@ Options:
     -h, --help                         Display this message.
 ";
 
-#[derive(Debug, Default)]
-struct Arguments {
-    config: String,
-}
-
 fn main() {
-    let _args = setup();
-    bullet::say("Hello!");
+    match bullet::process(setup()) {
+        Err(error) => fail(error),
+        _ => {},
+    }
 }
 
-fn setup() -> Arguments {
-    let mut arguments = Arguments::new();
+fn setup() -> Options {
+    let mut options = Options::new();
     let mut name: Option<&str> = None;
     for argument in env::args().skip(1) {
         match &argument[..] {
             "-h" | "--help" => usage(),
             "-c" | "--config" => name = Some("config"),
             _ => match name {
-                Some(_) => arguments.set(mem::replace(&mut name, None).unwrap(), argument),
+                Some(key) => {
+                    if !options.set(key, argument) {
+                        usage();
+                    }
+                    name = None;
+                },
                 None => usage(),
             },
         }
@@ -37,28 +41,17 @@ fn setup() -> Arguments {
     if name.is_some() {
         usage();
     }
-    arguments
+    options
 }
 
+#[inline]
 fn usage() -> ! {
-    fail(USAGE.trim());
-}
-
-fn fail(message: &str) -> ! {
-    println!("{}", message);
+    println!("{}", USAGE.trim());
     process::exit(1);
 }
 
-impl Arguments {
-    #[inline]
-    fn new() -> Arguments {
-        Default::default()
-    }
-
-    fn set(&mut self, name: &str, value: String) {
-        match name {
-            "config" => self.config = value,
-            _ => usage(),
-        }
-    }
+#[inline]
+fn fail<T: Display>(message: T) -> ! {
+    println!("Error: {}.", message);
+    process::exit(1);
 }
