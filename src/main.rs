@@ -4,10 +4,11 @@ use std::{env, process, mem};
 use std::default::Default;
 
 const USAGE: &'static str = "
-Usage: bullet [options] <config>
+Usage: bullet [options]
 
 Options:
-    -h, --help   Display this message.
+    -c CONFIG, --config CONFIG         Configuration file in XML (required).
+    -h, --help                         Display this message.
 ";
 
 #[derive(Debug, Default)]
@@ -23,18 +24,18 @@ fn main() {
 fn setup() -> Arguments {
     let mut arguments = Arguments::new();
     let mut name: Option<&str> = None;
-    for argument in env::args() {
+    for argument in env::args().skip(1) {
         match &argument[..] {
             "-h" | "--help" => usage(),
             "-c" | "--config" => name = Some("config"),
-            _ => {
-                if name.is_some() {
-                    arguments.set(mem::replace(&mut name, None).unwrap(), argument);
-                } else {
-                    usage();
-                }
+            _ => match name {
+                Some(_) => arguments.set(mem::replace(&mut name, None).unwrap(), argument),
+                None => usage(),
             },
         }
+    }
+    if name.is_some() {
+        usage();
     }
     arguments
 }
