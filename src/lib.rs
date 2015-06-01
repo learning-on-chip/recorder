@@ -1,4 +1,4 @@
-extern crate mcpat_sys as mcpat;
+extern crate mcpat;
 extern crate sqlite;
 extern crate threed_ice as ice;
 
