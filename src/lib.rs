@@ -21,10 +21,12 @@ macro_rules! ok(
     );
 );
 
+mod database;
 mod experiment;
 mod options;
 
-use experiment::Experiment;
+pub use database::Database;
+pub use experiment::Experiment;
 pub use options::Options;
 
 #[inline]

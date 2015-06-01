@@ -3,15 +3,16 @@ use mcpat;
 use std::fs;
 use std::path::Path;
 
-use {Options, Result};
+use {Database, Options, Result};
 
-pub struct Experiment<'l> {
-    system: mcpat::System<'l>,
+pub struct Experiment {
+    system: mcpat::System,
+    database: Database,
 }
 
-impl<'l> Experiment<'l> {
-    pub fn new(options: Options) -> Result<Experiment<'l>> {
-        let Options { config, .. } = options;
+impl Experiment {
+    pub fn new(options: Options) -> Result<Experiment> {
+        let Options { config, database } = options;
 
         let config = match config {
             Some(config) => config,
@@ -21,8 +22,14 @@ impl<'l> Experiment<'l> {
             raise!("the configuration file does not exist");
         }
 
+        let database = match database {
+            Some(database) => database,
+            None => raise!("a database file is required"),
+        };
+
         Ok(Experiment {
             system: ok!(mcpat::open(&config)),
+            database: try!(Database::open(&database)),
         })
     }
 
