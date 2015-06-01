@@ -27,10 +27,15 @@ impl Experiment {
             None => raise!("a database file is required"),
         };
 
-        Ok(Experiment {
-            system: ok!(mcpat::open(&config)),
-            database: try!(Database::open(&database)),
-        })
+        let system = ok!(mcpat::open(&config));
+        let database = try!(Database::open(&database));
+
+        {
+            let system = system.raw();
+            assert!(system.Private_L2 != 0);
+        }
+
+        Ok(Experiment { system: system, database: database })
     }
 
     pub fn run(&mut self) -> Result<()> {
@@ -45,6 +50,11 @@ impl Experiment {
             power.push(l3.power());
         }
 
+        Ok(())
+    }
+
+    pub fn setup(&mut self) -> Result<()> {
+        try!(self.database.setup());
         Ok(())
     }
 }
