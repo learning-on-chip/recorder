@@ -12,7 +12,7 @@ pub struct Experiment {
 
 impl Experiment {
     pub fn new(options: Options) -> Result<Experiment> {
-        let Options { config, database } = options;
+        let Options { config, database, .. } = options;
 
         let config = match config {
             Some(config) => config,

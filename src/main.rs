@@ -11,6 +11,8 @@ Usage: bullet [options]
 Options:
     -c FILE, --config   FILE       Configuration file in XML (required).
     -d FILE, --database FILE       Database file in SQLite3 (required).
+    -s,      --setup               Set up the database and exit.
+
     -h,      --help                Display this message.
 ";
 
@@ -22,26 +24,42 @@ fn main() {
 }
 
 fn setup() -> Options {
+    macro_rules! truth(
+        ($result:expr) => (if !$result { usage(); });
+    );
+
     let mut options = Options::new();
-    let mut name: Option<&str> = None;
+    let mut previous: Option<String> = None;
     for argument in env::args().skip(1) {
         match &argument[..] {
             "-h" | "--help" => usage(),
-            "-c" | "--config" => name = Some("config"),
-            "-d" | "--database" => name = Some("database"),
-            _ => match name {
-                Some(key) => {
-                    if !options.set(key, argument) {
-                        usage();
-                    }
-                    name = None;
-                },
-                None => usage(),
-            },
+            _ => {},
+        }
+        if argument.starts_with("--") {
+            if argument.len() < 3 {
+                usage();
+            }
+            if let Some(name) = previous {
+                truth!(options.set_flag(name, true));
+            }
+            previous = Some(String::from(&argument[2..]));
+        } else if argument.starts_with("-") {
+            if argument.len() != 2 {
+                usage();
+            }
+            if let Some(name) = previous {
+                truth!(options.set_flag(name, true));
+            }
+            previous = Some(String::from(&argument[1..]));
+        } else if let Some(name) = previous {
+            truth!(options.set_value(name, argument));
+            previous = None;
+        } else {
+            usage();
         }
     }
-    if name.is_some() {
-        usage();
+    if let Some(name) = previous {
+        truth!(options.set_flag(name, true));
     }
     options
 }
