@@ -4,6 +4,7 @@ use std::path::PathBuf;
 #[derive(Debug, Default)]
 pub struct Options {
     pub config: Option<PathBuf>,
+    pub database: Option<PathBuf>,
 }
 
 impl Options {
@@ -15,6 +16,7 @@ impl Options {
     pub fn set(&mut self, name: &str, value: String) -> bool {
         match name {
             "config" => self.config = Some(PathBuf::from(value)),
+            "database" => self.database = Some(PathBuf::from(value)),
             _ => return false,
         }
         true

@@ -9,8 +9,9 @@ const USAGE: &'static str = "
 Usage: bullet [options]
 
 Options:
-    -c CONFIG, --config CONFIG         Configuration file in XML (required).
-    -h, --help                         Display this message.
+    -c FILE, --config   FILE       Configuration file in XML (required).
+    -d FILE, --database FILE       Database file in SQLite3 (required).
+    -h,      --help                Display this message.
 ";
 
 fn main() {
@@ -27,6 +28,7 @@ fn setup() -> Options {
         match &argument[..] {
             "-h" | "--help" => usage(),
             "-c" | "--config" => name = Some("config"),
+            "-d" | "--database" => name = Some("database"),
             _ => match name {
                 Some(key) => {
                     if !options.set(key, argument) {
