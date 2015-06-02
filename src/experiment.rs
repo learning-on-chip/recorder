@@ -53,8 +53,21 @@ impl Experiment {
         Ok(())
     }
 
-    pub fn setup(&mut self) -> Result<()> {
-        try!(self.database.setup());
+    pub fn setup(&self) -> Result<()> {
+        let system = self.system.raw();
+
+        let cores = if system.homogeneous_cores != 0 { 1 } else {
+            system.number_of_cores as usize
+        };
+        let l3s = if system.homogeneous_L3s != 0 { 1 } else {
+            system.number_of_L3s as usize
+        };
+
+        let names = generate(&[("core#_dynamic", cores), ("core#_leakage", cores),
+                               ("l3#_dynamic", l3s), ("l3#_leakage", l3s)]);
+
+        try!(self.database.setup(&names));
+
         Ok(())
     }
 }
@@ -64,4 +77,18 @@ fn exists(path: &Path) -> bool {
         Ok(metadata) => !metadata.is_dir(),
         Err(_) => false,
     }
+}
+
+fn generate(pairs: &[(&str, usize)]) -> Vec<String> {
+    let mut names = vec![];
+    for &(name, count) in pairs.iter() {
+        let (prefix, suffix) = {
+            let i = name.find('#').unwrap();
+            (&name[0..i], &name[(i + 1)..])
+        };
+        for i in 0..count {
+            names.push(format!("{}{}{}", prefix, i, suffix));
+        }
+    }
+    names
 }
