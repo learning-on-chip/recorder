@@ -8,7 +8,7 @@ else
 root = $(target)/root
 endif
 
-ifeq ($(shall uname),Darwin)
+ifeq ($(shell uname),Darwin)
 library_path = DYLD_LIBRARY_PATH
 library_suffix = dylib
 else
