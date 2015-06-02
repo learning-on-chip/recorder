@@ -32,7 +32,9 @@ impl Experiment {
 
         {
             let system = system.raw();
-            assert!(system.Private_L2 != 0);
+            if system.number_of_L2s > 0 && system.Private_L2 == 0 {
+                raise!("shared L2 caches are currently not supported");
+            }
         }
 
         Ok(Experiment { system: system, database: database })
