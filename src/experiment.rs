@@ -39,16 +39,30 @@ impl Experiment {
     }
 
     pub fn run(&mut self) -> Result<()> {
-        use mcpat::Component;
+        use mcpat::{Component, Power};
+
+        macro_rules! push(
+            ($power:expr, $items:expr) => ({
+                for item in $items {
+                    let Power { dynamic, leakage } = item.power();
+                    $power.push(dynamic);
+                    $power.push(leakage);
+                }
+            });
+        );
+
+        let mut recorder = try!(self.database.recorder(&self.names()));
+        let mut power = Vec::with_capacity(recorder.len());
 
         let processor = ok!(self.system.processor());
-        let mut power = vec![];
-        for core in processor.cores() {
-            power.push(core.power());
+        push!(power, processor.cores());
+        push!(power, processor.l3s());
+
+        if power.len() != recorder.len() {
+            raise!("encoundered a dimensionality mismatch");
         }
-        for l3 in processor.l3s() {
-            power.push(l3.power());
-        }
+
+        try!(recorder.write(0, &power));
 
         Ok(())
     }

@@ -24,7 +24,8 @@ pub struct Database {
     backend: sqlite::Database,
 }
 
-pub struct Statement<'l> {
+pub struct Recorder<'l> {
+    length: usize,
     backend: sqlite::Statement<'l>,
 }
 
@@ -43,14 +44,55 @@ impl Database {
         Ok(ok!(self.backend.execute(&format!(prepare_sql!(), fields), None)))
     }
 
-    pub fn statement<'l>(&'l self, columns: &Vec<String>) -> Result<Statement<'l>> {
+    #[inline]
+    pub fn recorder<'l>(&'l self, columns: &[String]) -> Result<Recorder<'l>> {
+        Recorder::new(&self.backend, columns)
+    }
+}
+
+impl<'l> Recorder<'l> {
+    pub fn new(backend: &'l sqlite::Database, columns: &[String]) -> Result<Recorder<'l>> {
         let mut fields = String::new();
         let mut values = String::new();
         for ref name in columns.iter() {
             fields.push_str(&format!(", {}", name));
             values.push_str(", ?");
         }
-        let backend = ok!(self.backend.statement(&format!(statement_sql!(), fields, values)));
-        Ok(Statement { backend: backend })
+
+        let backend = ok!(backend.statement(&format!(statement_sql!(), fields, values)));
+
+        Ok(Recorder {
+            length: columns.len(),
+            backend: backend,
+        })
+    }
+
+    #[inline]
+    pub fn len(&self) -> usize {
+        self.length
+    }
+
+    pub fn write(&mut self, time: i64, values: &[f64]) -> Result<()> {
+        use sqlite::Binding::{Float, Integer};
+        use sqlite::ResultCode::Done;
+
+        if self.length != values.len() {
+            raise!("encoundered a dimensionality mistmatch");
+        }
+
+        let mut bindings = Vec::with_capacity(1 + self.length);
+
+        bindings.push(Integer(1, time));
+        for i in 0..self.length {
+            bindings.push(Float(i + 2, values[i]));
+        }
+
+        ok!(self.backend.reset());
+        ok!(self.backend.bind(&bindings));
+
+        match self.backend.step() {
+            Done => Ok(()),
+            _ => raise!("cannot write data into the database"),
+        }
     }
 }
