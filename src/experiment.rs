@@ -53,22 +53,29 @@ impl Experiment {
         Ok(())
     }
 
-    pub fn setup(&self) -> Result<()> {
-        let system = self.system.raw();
-
-        let cores = if system.homogeneous_cores != 0 { 1 } else {
-            system.number_of_cores as usize
-        };
-        let l3s = if system.homogeneous_L3s != 0 { 1 } else {
-            system.number_of_L3s as usize
-        };
-
-        let names = generate(&[("core#_dynamic", cores), ("core#_leakage", cores),
-                               ("l3#_dynamic", l3s), ("l3#_leakage", l3s)]);
-
-        try!(self.database.setup(&names));
-
+    pub fn prepare(&self) -> Result<()> {
+        try!(self.database.prepare(&self.names()));
         Ok(())
+    }
+
+    fn names(&self) -> Vec<String> {
+        let (cores, l3s) = (self.cores(), self.l3s());
+        generate(&[("core#_dynamic", cores), ("core#_leakage", cores),
+                   ("l3#_dynamic", l3s), ("l3#_leakage", l3s)])
+    }
+
+    fn cores(&self) -> usize {
+        let system = self.system.raw();
+        if system.homogeneous_cores != 0 { 1 } else {
+            system.number_of_cores as usize
+        }
+    }
+
+    fn l3s(&self) -> usize {
+        let system = self.system.raw();
+        if system.homogeneous_L3s != 0 { 1 } else {
+            system.number_of_L3s as usize
+        }
     }
 }
 

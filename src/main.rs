@@ -11,19 +11,19 @@ Usage: bullet [options]
 Options:
     -c FILE, --config   FILE       Configuration file in XML (required).
     -d FILE, --database FILE       Database file in SQLite3 (required).
-    -s,      --setup               Set up the database and exit.
+    -p,      --prepare             Set up the database and exit.
 
     -h,      --help                Display this message.
 ";
 
 fn main() {
-    match bullet::process(setup()) {
+    match bullet::process(options()) {
         Err(error) => fail(error),
         _ => {},
     }
 }
 
-fn setup() -> Options {
+fn options() -> Options {
     macro_rules! truth(
         ($result:expr) => (if !$result { usage(); });
     );

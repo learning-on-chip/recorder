@@ -5,7 +5,7 @@ use std::path::PathBuf;
 pub struct Options {
     pub config: Option<PathBuf>,
     pub database: Option<PathBuf>,
-    pub setup: Option<bool>,
+    pub prepare: Option<bool>,
 }
 
 impl Options {
@@ -16,7 +16,7 @@ impl Options {
 
     pub fn set_flag(&mut self, name: String, value: bool) -> bool {
         match &name[..] {
-            "s" | "setup" => self.setup = Some(value),
+            "p" | "prepare" => self.prepare = Some(value),
             _ => return false,
         }
         true

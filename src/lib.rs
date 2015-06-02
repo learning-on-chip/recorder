@@ -31,8 +31,8 @@ pub use options::Options;
 
 #[inline]
 pub fn process(options: Options) -> Result<()> {
-    if options.setup.unwrap_or(false) {
-        try!(Experiment::new(options)).setup()
+    if options.prepare.unwrap_or(false) {
+        try!(Experiment::new(options)).prepare()
     } else {
         try!(Experiment::new(options)).run()
     }
