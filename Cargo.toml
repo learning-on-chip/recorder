@@ -9,6 +9,6 @@ test = false
 doc = false
 
 [dependencies]
-mcpat = "*"
+mcpat = { version = "*", features = ["caching"] }
 sqlite = "*"
 threed-ice = "*"
