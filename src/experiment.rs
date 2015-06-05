@@ -6,29 +6,31 @@ use std::path::Path;
 use {Database, Options, Result};
 
 pub struct Experiment {
+    options: Options,
     system: mcpat::System,
     database: Database,
 }
 
 impl Experiment {
     pub fn new(options: Options) -> Result<Experiment> {
-        let Options { config, database, .. } = options;
-
-        let config = match config {
-            Some(config) => config,
-            None => raise!("a configuration file is required"),
-        };
-        if !exists(&config) {
-            raise!("the configuration file does not exist");
-        }
-
-        let database = match database {
-            Some(database) => database,
-            None => raise!("a database file is required"),
+        let system = {
+            let config = match options.config {
+                Some(ref config) => config,
+                None => raise!("a configuration file is required"),
+            };
+            if !exists(config) {
+                raise!("the configuration file does not exist");
+            }
+            ok!(mcpat::open(config))
         };
 
-        let system = ok!(mcpat::open(&config));
-        let database = try!(Database::open(&database));
+        let database = {
+            let database = match options.database {
+                Some(ref database) => database,
+                None => raise!("a database file is required"),
+            };
+            try!(Database::open(database))
+        };
 
         {
             let system = system.raw();
@@ -37,7 +39,11 @@ impl Experiment {
             }
         }
 
-        Ok(Experiment { system: system, database: database })
+        Ok(Experiment {
+            options: options,
+            system: system,
+            database: database,
+        })
     }
 
     pub fn run(&mut self) -> Result<()> {
@@ -52,6 +58,13 @@ impl Experiment {
                 }
             });
         );
+
+        mcpat::set_optimzed_for_clock_rate(true);
+
+        match self.options.caching {
+            Some((ref host, port)) => ok!(mcpat::caching::activate(&host, port)),
+            None => {},
+        }
 
         let mut recorder = try!(self.database.recorder(&self.names()));
         let mut power = Vec::with_capacity(recorder.len());
