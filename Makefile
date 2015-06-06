@@ -24,7 +24,7 @@ install: $(binary)
 	@mkdir -p $(root)/bin
 	@mkdir -p $(root)/lib
 	@cp $^ $(root)/bin/bullet
-	@find $(target)/build -name *.$(library_suffix) -exec cp {} $(root)/lib/ \;
+	@find $(target)/build -name lib*.$(library_suffix)* -exec cp {} $(root)/lib/ \;
 	@echo 'Well done! Now set your environment variables:'
 	@echo
 	@echo $(color)'    export BULLET_ROOT="$(root)"'
