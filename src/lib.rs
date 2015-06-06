@@ -1,3 +1,4 @@
+extern crate hiredis;
 extern crate mcpat;
 extern crate sqlite;
 
@@ -22,18 +23,18 @@ macro_rules! ok(
 );
 
 mod database;
-mod experiment;
 mod options;
+mod server;
+mod system;
+mod worker;
 
 pub use database::Database;
-pub use experiment::Experiment;
 pub use options::Options;
+pub use server::Server;
+pub use system::System;
+pub use worker::Worker;
 
 #[inline]
 pub fn process(options: Options) -> Result<()> {
-    if options.prepare.unwrap_or(false) {
-        try!(Experiment::new(options)).prepare()
-    } else {
-        try!(Experiment::new(options)).run()
-    }
+    try!(Worker::new(options)).run()
 }

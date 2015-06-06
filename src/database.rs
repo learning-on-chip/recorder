@@ -1,7 +1,6 @@
 use sqlite;
-use std::path::Path;
 
-use Result;
+use {Options, Result};
 
 macro_rules! prepare_sql(
     () => (
@@ -31,12 +30,16 @@ pub struct Recorder<'l> {
 
 impl Database {
     #[inline]
-    pub fn open(path: &Path) -> Result<Database> {
-        let backend = ok!(sqlite::open(path));
-        Ok(Database { backend: backend })
+    pub fn open(options: &Options) -> Result<Database> {
+        Ok(Database {
+            backend: match options.database {
+                Some(ref path) => ok!(sqlite::open(path)),
+                None => raise!("a database file is required"),
+            },
+        })
     }
 
-    pub fn prepare(&self, columns: &Vec<String>) -> Result<()> {
+    pub fn prepare(&mut self, columns: &Vec<String>) -> Result<()> {
         let mut fields = String::new();
         for ref name in columns.iter() {
             fields.push_str(&format!(", {} REAL", name));

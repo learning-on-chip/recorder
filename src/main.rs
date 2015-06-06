@@ -9,12 +9,11 @@ const USAGE: &'static str = "
 Usage: bullet [options]
 
 Options:
-    -c FILE, --config   FILE       Configuration file in XML (required).
-    -d FILE, --database FILE       Database file in SQLite3 (required).
-    -r,      --caching  HOST:PORT  Enable caching of optimization results.
-    -p,      --prepare             Set up the database and exit.
+    -s,       --server   HOST:PORT  Address of a Redis server (default 127.0.0.0:6379).
+    -d FILE,  --database FILE       Filename of an SQLite3 database (required).
+    -c,       --caching             Enable caching of optimization results.
 
-    -h,      --help                Display this message.
+    -h,      --help                 Display this message.
 ";
 
 fn main() {

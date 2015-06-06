@@ -9,6 +9,7 @@ test = false
 doc = false
 
 [dependencies]
+hiredis = "*"
 mcpat = { version = "*", features = ["caching"] }
 sqlite = "*"
 threed-ice = "*"
