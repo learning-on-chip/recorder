@@ -9,11 +9,12 @@ const USAGE: &'static str = "
 Usage: bullet [options]
 
 Options:
-    -s,       --server   HOST:PORT  Address of a Redis server (default 127.0.0.0:6379).
-    -d FILE,  --database FILE       Filename of an SQLite3 database (required).
-    -c,       --caching             Enable caching of optimization results.
+    -s, --server   HOST:PORT     Redis server (default 127.0.0.0:6379).
+    -q, --queue    NAME          Queue for distributing jobs (default bullet-queue).
+    -c, --caching                Enable caching of McPAT optimization results.
+    -d, --database FILE          SQLite3 database for dumping results (required).
 
-    -h,      --help                 Display this message.
+    -h,      --help              Display this message.
 ";
 
 fn main() {

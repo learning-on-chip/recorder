@@ -6,8 +6,9 @@ use server;
 #[derive(Debug, Default)]
 pub struct Options {
     pub server: Option<(String, usize)>,
-    pub database: Option<PathBuf>,
+    pub queue: Option<String>,
     pub caching: Option<bool>,
+    pub database: Option<PathBuf>,
 }
 
 impl Options {
@@ -41,6 +42,7 @@ impl Options {
                 };
                 self.server = Some((host, port));
             },
+            "q" | "queue" => self.queue = Some(value),
             "d" | "database" => self.database = Some(PathBuf::from(value)),
             _ => return false,
         }
