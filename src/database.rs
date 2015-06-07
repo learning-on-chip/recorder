@@ -10,8 +10,8 @@ macro_rules! prepare_sql(
     ($table:expr, $fields:expr) => (
         format!(r#"
 CREATE TABLE IF NOT EXISTS {} (id INTEGER PRIMARY KEY AUTOINCREMENT, time INTEGER{});
-CREATE INDEX IF NOT EXISTS {}_time_index ON bullet (time);
-        "#, $table, $fields, $table)
+CREATE INDEX IF NOT EXISTS {}_time_index ON {} (time);
+        "#, $table, $fields, $table, $table)
     );
 );
 
