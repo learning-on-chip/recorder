@@ -75,7 +75,7 @@ impl<'l> Recorder<'l> {
         self.length
     }
 
-    pub fn write(&mut self, time: i64, values: &[f64]) -> Result<()> {
+    pub fn write(&mut self, time: u64, values: &[f64]) -> Result<()> {
         use sqlite::Binding::{Float, Integer};
         use sqlite::ResultCode::Done;
 
@@ -85,7 +85,7 @@ impl<'l> Recorder<'l> {
 
         let mut bindings = Vec::with_capacity(1 + self.length);
 
-        bindings.push(Integer(1, time));
+        bindings.push(Integer(1, time as i64));
         for i in 0..self.length {
             bindings.push(Float(i + 2, values[i]));
         }

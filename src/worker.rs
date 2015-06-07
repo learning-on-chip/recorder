@@ -1,5 +1,5 @@
 use mcpat::{Component, Power};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use {Database, Options, Result, Server, System};
 
@@ -43,12 +43,13 @@ impl Worker {
             }
 
             let config = PathBuf::from(message);
+            let time = try!(derive_time(&config));
             let system = try!(System::load(&config));
 
             if !prepared {
                 let (cores, l3s) = (system.cores(), system.l3s());
-                names = generate(&[("core#_dynamic", cores), ("core#_leakage", cores),
-                                 ("l3#_dynamic", l3s), ("l3#_leakage", l3s)]);
+                names = generate_names(&[("core#_dynamic", cores), ("core#_leakage", cores),
+                                         ("l3#_dynamic", l3s), ("l3#_leakage", l3s)]);
                 try!(System::prepare(&self.options));
                 try!(self.database.prepare(&names));
                 prepared = true;
@@ -65,14 +66,14 @@ impl Worker {
                 raise!("encoundered a dimensionality mismatch");
             }
 
-            try!(recorder.write(0, &power));
+            try!(recorder.write(time, &power));
         }
 
         Ok(())
     }
 }
 
-fn generate(pairs: &[(&str, usize)]) -> Vec<String> {
+fn generate_names(pairs: &[(&str, usize)]) -> Vec<String> {
     let mut names = vec![];
     for &(name, count) in pairs.iter() {
         let (prefix, suffix) = {
@@ -84,4 +85,35 @@ fn generate(pairs: &[(&str, usize)]) -> Vec<String> {
         }
     }
     names
+}
+
+// Format: power-{start time}-{end time}-{elapsed time}.xml
+fn derive_time(path: &Path) -> Result<u64> {
+    macro_rules! bad(
+        () => (raise!("encountered a malformed file path"));
+    );
+    let mut name = match path.file_name() {
+        Some(name) => match name.to_str() {
+            Some(name) => name,
+            _ => bad!(),
+        },
+        _ => bad!(),
+    };
+    if !name.starts_with("power-") || !name.ends_with(".xml") {
+        bad!();
+    }
+    name = &name[6..(name.len() - 4)];
+    let i = match name.find('-') {
+        Some(i) => i + 1,
+        _ => bad!(),
+    };
+    let j = match name.rfind('-') {
+        Some(j) => j,
+        _ => bad!(),
+    };
+    name = &name[i..j];
+    match name.parse::<u64>() {
+        Ok(time) => Ok(time),
+        _ => bad!(),
+    }
 }
