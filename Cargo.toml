@@ -12,4 +12,3 @@ doc = false
 hiredis = "*"
 mcpat = { version = "*", features = ["caching"] }
 sqlite = "*"
-threed-ice = "*"
