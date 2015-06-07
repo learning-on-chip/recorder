@@ -4,8 +4,7 @@ use {Options, Result};
 
 pub const DEFAULT_HOST: &'static str = "127.0.0.1";
 pub const DEFAULT_PORT: usize = 6379;
-
-pub const DEFAULT_QUEUE: &'static str = "bullet-queue";
+pub const DEFAULT_QUEUE: &'static str = "bullet";
 
 pub struct Server {
     backend: hiredis::Context,

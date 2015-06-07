@@ -1,26 +1,31 @@
 use sqlite;
+use std::path::Path;
 
 use {Options, Result};
 
+pub const DEFAULT_FILE: &'static str = "bullet.sqlite3";
+pub const DEFAULT_TABLE: &'static str = "bullet";
+
 macro_rules! prepare_sql(
-    () => (
-        r#"
-CREATE TABLE IF NOT EXISTS bullet (id INTEGER PRIMARY KEY AUTOINCREMENT, time INTEGER{});
-CREATE INDEX IF NOT EXISTS bullet_time_index ON bullet (time);
-        "#
+    ($table:expr, $fields:expr) => (
+        format!(r#"
+CREATE TABLE IF NOT EXISTS {} (id INTEGER PRIMARY KEY AUTOINCREMENT, time INTEGER{});
+CREATE INDEX IF NOT EXISTS {}_time_index ON bullet (time);
+        "#, $table, $fields, $table)
     );
 );
 
 macro_rules! statement_sql(
-    () => (
-        r#"
-INSERT INTO bullet (time{}) VALUES (?{});
-        "#
+    ($table:expr, $fields:expr, $values:expr) => (
+        format!(r#"
+INSERT INTO {} (time{}) VALUES (?{});
+        "#, $table, $fields, $values)
     );
 );
 
 pub struct Database {
     backend: sqlite::Database,
+    table: String,
 }
 
 pub struct Recorder<'l> {
@@ -34,7 +39,11 @@ impl Database {
         Ok(Database {
             backend: match options.database {
                 Some(ref path) => ok!(sqlite::open(path)),
-                None => raise!("a database file is required"),
+                None => ok!(sqlite::open(&Path::new(DEFAULT_FILE))),
+            },
+            table: match options.table {
+                Some(ref table) => table.to_string(),
+                None => String::from(DEFAULT_TABLE),
             },
         })
     }
@@ -44,17 +53,17 @@ impl Database {
         for ref name in columns.iter() {
             fields.push_str(&format!(", {} REAL", name));
         }
-        Ok(ok!(self.backend.execute(&format!(prepare_sql!(), fields), None)))
+        Ok(ok!(self.backend.execute(&prepare_sql!(&self.table, &fields), None)))
     }
 
     #[inline]
     pub fn recorder<'l>(&'l self, columns: &[String]) -> Result<Recorder<'l>> {
-        Recorder::new(&self.backend, columns)
+        Recorder::new(self, columns)
     }
 }
 
 impl<'l> Recorder<'l> {
-    pub fn new(backend: &'l sqlite::Database, columns: &[String]) -> Result<Recorder<'l>> {
+    pub fn new(database: &'l Database, columns: &[String]) -> Result<Recorder<'l>> {
         let mut fields = String::new();
         let mut values = String::new();
         for ref name in columns.iter() {
@@ -62,7 +71,8 @@ impl<'l> Recorder<'l> {
             values.push_str(", ?");
         }
 
-        let backend = ok!(backend.statement(&format!(statement_sql!(), fields, values)));
+        let backend = ok!(database.backend.statement(&statement_sql!(&database.table,
+                                                                     fields, values)));
 
         Ok(Recorder {
             length: columns.len(),

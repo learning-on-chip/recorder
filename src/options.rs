@@ -9,6 +9,7 @@ pub struct Options {
     pub queue: Option<String>,
     pub caching: Option<bool>,
     pub database: Option<PathBuf>,
+    pub table: Option<String>,
 }
 
 impl Options {
@@ -44,6 +45,7 @@ impl Options {
             },
             "q" | "queue" => self.queue = Some(value),
             "d" | "database" => self.database = Some(PathBuf::from(value)),
+            "t" | "table" => self.table = Some(value),
             _ => return false,
         }
         true
