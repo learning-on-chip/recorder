@@ -26,11 +26,9 @@ impl Server {
     pub fn fetch(&mut self) -> Result<String> {
         use hiredis::Reply;
         match ok!(self.backend.command(&["BLPOP", DEFAULT_QUEUE, "0"])) {
-            Reply::Array(mut elements) => {
-                match elements.pop() {
-                    Some(Reply::Bulk(bytes)) => Ok(ok!(String::from_utf8(bytes))),
-                    _ => raise!("received an unexpected reply from the server"),
-                }
+            Reply::Array(mut elements) => match elements.pop() {
+                Some(Reply::Bulk(bytes)) => Ok(ok!(String::from_utf8(bytes))),
+                _ => raise!("received an unexpected reply from the server"),
             },
             _ => raise!("received an unexpected reply from the server"),
         }
