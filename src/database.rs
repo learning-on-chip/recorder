@@ -36,11 +36,18 @@ pub struct Recorder<'l> {
 impl<'l> Database<'l> {
     #[inline]
     pub fn open(options: &Options) -> Result<Database<'l>> {
+        let mut backend = match options.database {
+            Some(ref path) => ok!(sqlite::open(path)),
+            None => ok!(sqlite::open(&Path::new(DEFAULT_FILE))),
+        };
+        ok!(backend.set_busy_handler(|attempts| {
+            if cfg!(debug_assertions) {
+                println!("An SQLite operation has failed ({} attempt(s)).", attempts);
+            }
+            true
+        }));
         Ok(Database {
-            backend: match options.database {
-                Some(ref path) => ok!(sqlite::open(path)),
-                None => ok!(sqlite::open(&Path::new(DEFAULT_FILE))),
-            },
+            backend: backend,
             table: match options.table {
                 Some(ref table) => table.to_string(),
                 None => String::from(DEFAULT_TABLE),
