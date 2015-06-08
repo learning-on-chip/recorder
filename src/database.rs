@@ -23,8 +23,8 @@ INSERT INTO {} (time{}) VALUES (?{});
     );
 );
 
-pub struct Database {
-    backend: sqlite::Database,
+pub struct Database<'l> {
+    backend: sqlite::Database<'l>,
     table: String,
 }
 
@@ -33,9 +33,9 @@ pub struct Recorder<'l> {
     backend: sqlite::Statement<'l>,
 }
 
-impl Database {
+impl<'l> Database<'l> {
     #[inline]
-    pub fn open(options: &Options) -> Result<Database> {
+    pub fn open(options: &Options) -> Result<Database<'l>> {
         Ok(Database {
             backend: match options.database {
                 Some(ref path) => ok!(sqlite::open(path)),
@@ -53,11 +53,11 @@ impl Database {
         for ref name in columns.iter() {
             fields.push_str(&format!(", {} REAL", name));
         }
-        Ok(ok!(self.backend.execute(&prepare_sql!(&self.table, &fields), None)))
+        Ok(ok!(self.backend.execute(&prepare_sql!(&self.table, &fields))))
     }
 
     #[inline]
-    pub fn recorder<'l>(&'l self, columns: &[String]) -> Result<Recorder<'l>> {
+    pub fn recorder(&'l self, columns: &[String]) -> Result<Recorder<'l>> {
         Recorder::new(self, columns)
     }
 }
@@ -71,8 +71,8 @@ impl<'l> Recorder<'l> {
             values.push_str(", ?");
         }
 
-        let backend = ok!(database.backend.statement(&statement_sql!(&database.table,
-                                                                     fields, values)));
+        let backend = ok!(database.backend.prepare(&statement_sql!(&database.table,
+                                                                   fields, values)));
 
         Ok(Recorder {
             length: columns.len(),

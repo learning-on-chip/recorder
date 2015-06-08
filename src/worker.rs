@@ -5,14 +5,14 @@ use {Database, Options, Result, Server, System};
 
 const HALT_MESSAGE: &'static str = "bullet:halt";
 
-pub struct Worker {
+pub struct Worker<'l> {
     server: Server,
-    database: Database,
+    database: Database<'l>,
     options: Options,
 }
 
-impl Worker {
-    pub fn new(options: Options) -> Result<Worker> {
+impl<'l> Worker<'l> {
+    pub fn new(options: Options) -> Result<Worker<'l>> {
         Ok(Worker {
             server: try!(Server::connect(&options)),
             database: try!(Database::open(&options)),
