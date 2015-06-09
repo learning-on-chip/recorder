@@ -26,12 +26,12 @@ install: $(binary)
 	@cp $^ $(root)/bin/bullet
 	@find $(target)/build -name lib*.$(library_suffix)* -exec cp {} $(root)/lib/ \;
 	@echo 'Well done! Now set your environment variables:'
-	@echo $(color)''
-	@echo '    export BULLET_ROOT="$(root)"'
-	@echo '    export PATH="$$BULLET_ROOT/bin:$$PATH"'
-	@echo '    export $(library_path)="$$BULLET_ROOT/lib:$$$(library_path)"'
+	@echo -n $(color)''
+	@echo 'export BULLET_ROOT="$(root)"'
+	@echo 'export PATH="$$BULLET_ROOT/bin:$$PATH"'
+	@echo 'export $(library_path)="$$BULLET_ROOT/lib:$$$(library_path)"'
 
 $(binary): $(sources)
-	cargo build --release
+	@cargo build --release
 
 .PHONY: build install
