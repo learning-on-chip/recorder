@@ -48,8 +48,8 @@ impl<'l> Worker<'l> {
 
             if !prepared {
                 let (cores, l3s) = (system.cores(), system.l3s());
-                names = generate_names(&[("core#_dynamic", cores), ("core#_leakage", cores),
-                                         ("l3#_dynamic", l3s), ("l3#_leakage", l3s)]);
+                names = generate_names(&[(&["core#_dynamic", "core#_leakage"], cores),
+                                         (&["l3#_dynamic", "l3#_leakage"], l3s)]);
                 try!(System::prepare(&self.options));
                 try!(self.database.prepare(&names));
                 prepared = true;
@@ -73,15 +73,17 @@ impl<'l> Worker<'l> {
     }
 }
 
-fn generate_names(pairs: &[(&str, usize)]) -> Vec<String> {
+fn generate_names(templates: &[(&[&str], usize)]) -> Vec<String> {
     let mut names = vec![];
-    for &(name, count) in pairs.iter() {
-        let (prefix, suffix) = {
-            let i = name.find('#').unwrap();
-            (&name[0..i], &name[(i + 1)..])
-        };
+    for &(variants, count) in templates.iter() {
+        let variants = variants.iter().map(|variant| {
+            let i = variant.find('#').unwrap();
+            (&variant[0..i], &variant[(i + 1)..])
+        }).collect::<Vec<_>>();
         for i in 0..count {
-            names.push(format!("{}{}{}", prefix, i, suffix));
+            for &(prefix, suffix) in variants.iter() {
+                names.push(format!("{}{}{}", prefix, i, suffix));
+            }
         }
     }
     names
@@ -115,5 +117,14 @@ fn derive_time(path: &Path) -> Result<u64> {
     match name.parse::<u64>() {
         Ok(time) => Ok(time),
         _ => bad!(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn generate_names() {
+        let names = super::generate_names(&[(&["a#b", "c#d"], 2), (&["e#f", "g#h"], 1)]);
+        assert_eq!(&names[..], &["a0b", "c0d", "a1b", "c1d", "e0f", "g0h"]);
     }
 }
