@@ -94,7 +94,7 @@ impl<'l> Recorder<'l> {
 
     pub fn write(&mut self, time: u64, values: &[f64]) -> Result<()> {
         use sqlite::Binding::{Float, Integer};
-        use sqlite::ResultCode::Done;
+        use sqlite::State::Done;
 
         if self.length != values.len() {
             raise!("encoundered a dimensionality mistmatch");
@@ -110,7 +110,7 @@ impl<'l> Recorder<'l> {
         ok!(self.backend.reset());
         ok!(self.backend.bind(&bindings));
 
-        match self.backend.step() {
+        match ok!(self.backend.step()) {
             Done => Ok(()),
             _ => raise!("cannot write data into the database"),
         }
