@@ -4,7 +4,7 @@ use std::path::Path;
 use {Options, Result, server};
 
 pub struct System {
-    backend: mcpat::System,
+    backend: mcpat::Spec,
 }
 
 impl System {
