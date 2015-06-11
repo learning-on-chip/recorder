@@ -12,8 +12,7 @@ Options:
     -c, --caching              Enable caching of McPAT optimization results.
     -d, --database PATH        SQLite3 database (default bullet.sqlite3).
     -t, --table    NAME        Table name for dumping results (default bullet).
-
-    -h,      --help            Display this message.
+    -h, --help                 Display this message.
 ";
 
 pub fn execute(options: &Options) -> Result<()> {

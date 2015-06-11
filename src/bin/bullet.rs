@@ -31,7 +31,7 @@ fn main() {
     };
     let result = match &command[..] {
         "power" => power::execute(&options),
-        _ => usage(USAGE),
+        _ => fail("the command is invalid"),
     };
     match result {
         Err(error) => fail(error),
@@ -42,13 +42,13 @@ fn main() {
 #[allow(unused_must_use)]
 fn fail<T: Display>(error: T) -> ! {
     use std::io::Write;
-    io::stderr().write_fmt(format_args!("Error: {}.", error));
+    io::stderr().write_fmt(format_args!("Error: {}.\n", error));
     process::exit(1);
 }
 
 #[allow(unused_must_use)]
 fn usage(message: &str) -> ! {
     use std::io::Write;
-    io::stderr().write_fmt(format_args!("{}", message.trim()));
-    process::exit(1);
+    io::stderr().write_fmt(format_args!("{}\n", message.trim()));
+    process::exit(0);
 }
