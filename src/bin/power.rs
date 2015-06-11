@@ -1,5 +1,10 @@
-use bullet::{Database, Options, Result, Server, System};
 use std::path::{Path, PathBuf};
+
+use bullet::{Options, Result, System};
+use bullet::database::{ColumnKind, ColumnValue, Database};
+use bullet::server::Server;
+
+use support;
 
 const HALT_MESSAGE: &'static str = "bullet:halt";
 
@@ -7,39 +12,39 @@ const USAGE: &'static str = "
 Usage: bullet power [options]
 
 Options:
-    -s, --server   HOST:PORT   Redis server (default 127.0.0.0:6379).
-    -q, --queue    NAME        Queue for distributing jobs (default bullet).
-    -c, --caching              Enable caching of McPAT optimization results.
-    -d, --database PATH        SQLite3 database (default bullet.sqlite3).
-    -t, --table    NAME        Table name for dumping results (default bullet).
-    -h, --help                 Display this message.
+    --server   HOST:PORT     Redis server (default 127.0.0.0:6379).
+    --queue    NAME          Queue for distributing jobs (default bullet).
+    --caching                Enable caching of McPAT optimization results.
+    --database PATH          SQLite3 database (default bullet.sqlite3).
+    --table    NAME          Table name for dumping results (default bullet).
+    --help                   Display this message.
 ";
 
 pub fn execute(options: &Options) -> Result<()> {
     use mcpat::{Component, Power};
 
     macro_rules! push(
-        ($power:expr, $items:expr) => ({
+        ($columns:expr, $items:expr) => ({
             for item in $items {
                 let Power { dynamic, leakage } = item.power();
-                $power.push(dynamic);
-                $power.push(leakage);
+                $columns.push(ColumnValue::Float(dynamic));
+                $columns.push(ColumnValue::Float(leakage));
             }
         });
     );
 
-    if options.get::<bool>("h").or_else(|| options.get::<bool>("help")).unwrap_or(false) {
+    if options.get::<bool>("help").unwrap_or(false) {
         ::usage(USAGE);
     }
 
-    let mut server = try!(Server::connect(options));
-    let mut database = try!(Database::open(options));
+    try!(System::setup(options));
 
-    let mut prepared = false;
-    let mut names = vec![];
+    let mut server = try!(Server::connect(options));
+    let database = try!(Database::open(options));
+    let mut recorder = None;
 
     loop {
-        let message = ok!(server.fetch());
+        let message = ok!(server.receive());
 
         match &message[..] {
             HALT_MESSAGE => break,
@@ -48,52 +53,40 @@ pub fn execute(options: &Options) -> Result<()> {
 
         let config = PathBuf::from(message);
         let time = try!(derive_time(&config));
-        let system = try!(System::load(&config));
+        let system = try!(System::open(&config));
 
-        if !prepared {
-            let (cores, l3s) = (system.cores(), system.l3s());
-            names = generate_names(&[(&["core#_dynamic", "core#_leakage"], cores),
-                                     (&["l3#_dynamic", "l3#_leakage"], l3s)]);
-            try!(System::prepare(options));
-            try!(database.prepare(&names));
-            prepared = true;
-        }
+        let recorder = match recorder {
+            Some(ref mut recorder) => recorder,
+            _ => {
+                let (cores, l3s) = (system.cores(), system.l3s());
+                let names = support::generate(&[(&["core#_dynamic", "core#_leakage"], cores),
+                                                (&["l3#_dynamic", "l3#_leakage"], l3s)]);
 
-        let mut recorder = try!(database.recorder(&names));
-        let mut power = Vec::with_capacity(recorder.len());
+                let mut columns = vec![];
+                columns.push((ColumnKind::Integer, "time"));
+                for name in names.iter() {
+                    columns.push((ColumnKind::Float, name));
+                }
+
+                recorder = Some(try!(database.record(&columns)));
+                recorder.as_mut().unwrap()
+            }
+        };
 
         let processor = try!(system.compute());
-        push!(power, processor.cores());
-        push!(power, processor.l3s());
 
-        if power.len() != recorder.len() {
-            raise!("encoundered a dimensionality mismatch");
-        }
+        let mut columns = vec![ColumnValue::Integer(time as i64)];
+        push!(columns, processor.cores());
+        push!(columns, processor.l3s());
 
-        try!(recorder.write(time, &power));
+        try!(recorder.write(&columns));
     }
 
     Ok(())
 }
 
-fn generate_names(templates: &[(&[&str], usize)]) -> Vec<String> {
-    let mut names = vec![];
-    for &(variants, count) in templates.iter() {
-        let variants = variants.iter().map(|variant| {
-            let i = variant.find('#').unwrap();
-            (&variant[0..i], &variant[(i + 1)..])
-        }).collect::<Vec<_>>();
-        for i in 0..count {
-            for &(prefix, suffix) in variants.iter() {
-                names.push(format!("{}{}{}", prefix, i, suffix));
-            }
-        }
-    }
-    names
-}
-
 // Format: power-{start time}-{end time}-{elapsed time}.xml
-fn derive_time(path: &Path) -> Result<u64> {
+pub fn derive_time(path: &Path) -> Result<u64> {
     macro_rules! bad(
         () => (raise!("encountered a malformed file path"));
     );
@@ -120,14 +113,5 @@ fn derive_time(path: &Path) -> Result<u64> {
     match name.parse::<u64>() {
         Ok(time) => Ok(time),
         _ => bad!(),
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn generate_names() {
-        let names = super::generate_names(&[(&["a#b", "c#d"], 2), (&["e#f", "g#h"], 1)]);
-        assert_eq!(&names[..], &["a0b", "c0d", "a1b", "c1d", "e0f", "g0h"]);
     }
 }

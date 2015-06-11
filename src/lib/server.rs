@@ -25,7 +25,7 @@ impl Server {
         })
     }
 
-    pub fn fetch(&mut self) -> Result<String> {
+    pub fn receive(&mut self) -> Result<String> {
         use hiredis::Reply;
         match ok!(self.backend.command(&["BLPOP", &self.queue, "0"])) {
             Reply::Array(mut elements) => match elements.pop() {

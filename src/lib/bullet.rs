@@ -23,12 +23,11 @@ macro_rules! ok(
     );
 );
 
-mod database;
 mod options;
-mod server;
 mod system;
 
-pub use database::{Database, Recorder};
-pub use options::Options;
-pub use server::Server;
+pub mod database;
+pub mod server;
+
+pub use options::{Options, OptionValue};
 pub use system::System;

@@ -1,7 +1,7 @@
 use mcpat;
 use std::path::Path;
 
-use {Address, Options, Result, server};
+use {Address, Options, Result};
 
 pub struct System {
     backend: mcpat::System,
@@ -9,7 +9,7 @@ pub struct System {
 
 impl System {
     #[inline]
-    pub fn load(path: &Path) -> Result<System> {
+    pub fn open(path: &Path) -> Result<System> {
         let backend = ok!(mcpat::open(path));
         {
             let system = backend.raw();
@@ -17,16 +17,19 @@ impl System {
                 raise!("shared L2 caches are currently not supported");
             }
         }
+
         Ok(System { backend: backend })
     }
 
-    pub fn prepare(options: &Options) -> Result<()> {
+    pub fn setup(options: &Options) -> Result<()> {
+        use server::{DEFAULT_HOST, DEFAULT_PORT};
+
         mcpat::set_optimzed_for_clock_rate(true);
 
         if options.get::<bool>("caching").unwrap_or(false) {
             match options.get::<Address>("server") {
                 Some((ref host, port)) => ok!(mcpat::caching::activate(host, port)),
-                _ => ok!(mcpat::caching::activate(server::DEFAULT_HOST, server::DEFAULT_PORT)),
+                _ => ok!(mcpat::caching::activate(DEFAULT_HOST, DEFAULT_PORT)),
             }
         }
 
