@@ -4,8 +4,8 @@ extern crate sqlite;
 
 use std::fmt::Display;
 
-pub type Result<T> = std::result::Result<T, Error>;
 pub type Error = Box<Display>;
+pub type Result<T> = std::result::Result<T, Error>;
 
 macro_rules! raise(
     ($message:expr) => (
