@@ -66,14 +66,12 @@ fn options() -> Options {
     options
 }
 
-#[inline]
-fn usage() -> ! {
-    println!("{}", USAGE.trim());
+fn fail<T: Display>(message: T) -> ! {
+    println!("Error: {}.", message);
     process::exit(1);
 }
 
-#[inline]
-fn fail<T: Display>(message: T) -> ! {
-    println!("Error: {}.", message);
+fn usage() -> ! {
+    println!("{}", USAGE.trim());
     process::exit(1);
 }
