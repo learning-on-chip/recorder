@@ -3,8 +3,13 @@ name = "bullet"
 version = "0.0.1"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 
+[lib]
+name = "bullet"
+path = "src/lib/bullet.rs"
+
 [[bin]]
 name = "bullet"
+path = "src/bin/bullet.rs"
 test = false
 doc = false
 
