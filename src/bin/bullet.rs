@@ -1,77 +1,54 @@
-extern crate bullet;
+#[macro_use] extern crate bullet;
+extern crate mcpat;
+
+mod power;
 
 use std::{env, process};
 use std::fmt::Display;
+use std::io;
 
 use bullet::Options;
 
 const USAGE: &'static str = "
-Usage: bullet [options]
+Usage: bullet <command> [options]
+
+Commands:
+    power           Record the power consumption of a system on a chip.
 
 Options:
-    -s, --server   HOST:PORT   Redis server (default 127.0.0.0:6379).
-    -q, --queue    NAME        Queue for distributing jobs (default bullet).
-    -c, --caching              Enable caching of McPAT optimization results.
-    -d, --database PATH        SQLite3 database (default bullet.sqlite3).
-    -t, --table    NAME        Table name for dumping results (default bullet).
-
-    -h,      --help            Display this message.
+    -h, --help      Display the usage information of a particular command.
 ";
 
 fn main() {
-    match bullet::process(options()) {
+    let mut arguments = env::args().skip(1);
+    let command = match arguments.next() {
+        Some(command) => command,
+        _ => usage(USAGE),
+    };
+    let options = match Options::parse(arguments) {
+        Ok(options) => options,
+        Err(error) => fail(error),
+    };
+    let result = match &command[..] {
+        "power" => power::execute(&options),
+        _ => usage(USAGE),
+    };
+    match result {
         Err(error) => fail(error),
         _ => {},
     }
 }
 
-fn options() -> Options {
-    macro_rules! truth(
-        ($result:expr) => (if !$result { usage(); });
-    );
-
-    let mut options = Options::new();
-    let mut previous: Option<String> = None;
-    for argument in env::args().skip(1) {
-        match &argument[..] {
-            "-h" | "--help" => usage(),
-            _ => {},
-        }
-        if argument.starts_with("--") {
-            if argument.len() < 3 {
-                usage();
-            }
-            if let Some(name) = previous {
-                truth!(options.set_flag(name, true));
-            }
-            previous = Some(String::from(&argument[2..]));
-        } else if argument.starts_with("-") {
-            if argument.len() != 2 {
-                usage();
-            }
-            if let Some(name) = previous {
-                truth!(options.set_flag(name, true));
-            }
-            previous = Some(String::from(&argument[1..]));
-        } else if let Some(name) = previous {
-            truth!(options.set_value(name, argument));
-            previous = None;
-        } else {
-            usage();
-        }
-    }
-    if let Some(name) = previous {
-        truth!(options.set_flag(name, true));
-    }
-    options
-}
-
-fn fail<T: Display>(message: T) -> ! {
-    println!("Error: {}.", message);
+#[allow(unused_must_use)]
+fn fail<T: Display>(error: T) -> ! {
+    use std::io::Write;
+    io::stderr().write_fmt(format_args!("Error: {}.", error));
     process::exit(1);
 }
 
-fn usage() -> ! {
-    println!("{}", USAGE.trim());
+#[allow(unused_must_use)]
+fn usage(message: &str) -> ! {
+    use std::io::Write;
+    io::stderr().write_fmt(format_args!("{}", message.trim()));
     process::exit(1);
 }

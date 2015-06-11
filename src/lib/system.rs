@@ -1,10 +1,10 @@
 use mcpat;
 use std::path::Path;
 
-use {Options, Result, server};
+use {Address, Options, Result, server};
 
 pub struct System {
-    backend: mcpat::Spec,
+    backend: mcpat::System,
 }
 
 impl System {
@@ -23,10 +23,10 @@ impl System {
     pub fn prepare(options: &Options) -> Result<()> {
         mcpat::set_optimzed_for_clock_rate(true);
 
-        if options.caching.unwrap_or(false) {
-            match options.server {
+        if options.get::<bool>("caching").unwrap_or(false) {
+            match options.get::<Address>("server") {
                 Some((ref host, port)) => ok!(mcpat::caching::activate(host, port)),
-                None => ok!(mcpat::caching::activate(server::DEFAULT_HOST, server::DEFAULT_PORT)),
+                _ => ok!(mcpat::caching::activate(server::DEFAULT_HOST, server::DEFAULT_PORT)),
             }
         }
 
@@ -34,8 +34,8 @@ impl System {
     }
 
     #[inline]
-    pub fn processor<'l>(&'l self) -> Result<mcpat::Processor<'l>> {
-        Ok(ok!(self.backend.processor()))
+    pub fn compute<'l>(&'l self) -> Result<mcpat::Processor<'l>> {
+        Ok(ok!(self.backend.compute()))
     }
 
     pub fn cores(&self) -> usize {

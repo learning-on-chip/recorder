@@ -1,6 +1,6 @@
 use hiredis;
 
-use {Options, Result};
+use {Address, Options, Result};
 
 pub const DEFAULT_HOST: &'static str = "127.0.0.1";
 pub const DEFAULT_PORT: usize = 6379;
@@ -14,13 +14,13 @@ pub struct Server {
 impl Server {
     pub fn connect(options: &Options) -> Result<Server> {
         Ok(Server {
-            backend: match options.server {
+            backend: match options.get::<Address>("server") {
                 Some((ref host, port)) => ok!(hiredis::connect(host, port)),
-                None => ok!(hiredis::connect(DEFAULT_HOST, DEFAULT_PORT)),
+                _ => ok!(hiredis::connect(DEFAULT_HOST, DEFAULT_PORT)),
             },
-            queue: match options.queue {
-                Some(ref queue) => queue.to_string(),
-                None => String::from(DEFAULT_QUEUE),
+            queue: match options.get::<String>("queue") {
+                Some(queue) => queue,
+                _ => String::from(DEFAULT_QUEUE),
             },
         })
     }

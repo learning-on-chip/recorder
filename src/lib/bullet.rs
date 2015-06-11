@@ -2,17 +2,18 @@ extern crate hiredis;
 extern crate mcpat;
 extern crate sqlite;
 
-use std::fmt::Display;
-
-pub type Error = Box<Display>;
+pub type Address = (String, usize);
+pub type Error = Box<std::fmt::Display>;
 pub type Result<T> = std::result::Result<T, Error>;
 
+#[macro_export]
 macro_rules! raise(
     ($message:expr) => (
         return Err(Box::new($message));
     );
 );
 
+#[macro_export]
 macro_rules! ok(
     ($result:expr) => (
         match $result {
@@ -26,15 +27,8 @@ mod database;
 mod options;
 mod server;
 mod system;
-mod worker;
 
-pub use database::Database;
+pub use database::{Database, Recorder};
 pub use options::Options;
 pub use server::Server;
 pub use system::System;
-pub use worker::Worker;
-
-#[inline]
-pub fn process(options: Options) -> Result<()> {
-    try!(Worker::new(options)).run()
-}
