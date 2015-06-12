@@ -45,11 +45,13 @@ pub struct Recorder<'l> {
 
 impl<'l> Database<'l> {
     pub fn open(options: &Options) -> Result<Database<'l>> {
+        let mut backend = match options.get::<String>("database") {
+            Some(ref value) => ok!(sqlite::open(&Path::new(value))),
+            _ => ok!(sqlite::open(&Path::new(DEFAULT_FILE))),
+        };
+        ok!(backend.set_busy_handler(|_| true));
         Ok(Database {
-            backend: match options.get::<String>("database") {
-                Some(ref value) => ok!(sqlite::open(&Path::new(value))),
-                _ => ok!(sqlite::open(&Path::new(DEFAULT_FILE))),
-            },
+            backend: backend,
             table: match options.get::<String>("table") {
                 Some(table) => table,
                 _ => String::from(DEFAULT_TABLE),
