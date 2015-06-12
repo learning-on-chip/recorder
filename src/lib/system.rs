@@ -24,7 +24,7 @@ impl System {
     pub fn setup(options: &Options) -> Result<()> {
         use server::{DEFAULT_HOST, DEFAULT_PORT};
 
-        mcpat::set_optimzed_for_clock_rate(true);
+        mcpat::optimze_for_clock_rate(true);
 
         if options.get::<bool>("caching").unwrap_or(false) {
             match options.get::<Address>("server") {

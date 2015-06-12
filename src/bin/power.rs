@@ -21,14 +21,13 @@ Options:
 ";
 
 pub fn execute(options: &Options) -> Result<()> {
-    use mcpat::{Component, Power};
+    use mcpat::Component;
 
     macro_rules! push(
         ($columns:expr, $items:expr) => ({
             for item in $items {
-                let Power { dynamic, leakage } = item.power();
-                $columns.push(ColumnValue::Float(dynamic));
-                $columns.push(ColumnValue::Float(leakage));
+                $columns.push(ColumnValue::Float(item.dynamic_power()));
+                $columns.push(ColumnValue::Float(item.leakage_power()));
             }
         });
     );
