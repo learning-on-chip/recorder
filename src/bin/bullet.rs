@@ -35,7 +35,7 @@ fn main() {
     let result = match &command[..] {
         "area" => area::execute(&options),
         "power" => power::execute(&options),
-        _ => fail("the command is invalid"),
+        _ => fail("the command is unknown"),
     };
     match result {
         Err(error) => fail(error),

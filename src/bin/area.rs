@@ -34,7 +34,7 @@ pub fn execute(options: &Options) -> Result<()> {
 
     let system = match options.get::<PathBuf>("config") {
         Some(ref config) => try!(System::open(config)),
-        _ => raise!("a McPAT configuration file is required"),
+        _ => raise!("a configuration file of McPAT is required"),
     };
 
     let database = try!(Database::open(options));
