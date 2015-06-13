@@ -84,7 +84,7 @@ pub fn execute(options: &Options) -> Result<()> {
     Ok(())
 }
 
-// Format: power-{start time}-{end time}-{elapsed time}.xml
+// Format: power-{time}-{whatever}.xml
 pub fn derive_time(path: &Path) -> Result<u64> {
     macro_rules! bad(
         () => (raise!("encountered a malformed file path"));
@@ -99,16 +99,12 @@ pub fn derive_time(path: &Path) -> Result<u64> {
     if !name.starts_with("power-") || !name.ends_with(".xml") {
         bad!();
     }
-    name = &name[6..(name.len() - 4)];
+    name = &name[6..];
     let i = match name.find('-') {
-        Some(i) => i + 1,
+        Some(i) => i,
         _ => bad!(),
     };
-    let j = match name.rfind('-') {
-        Some(j) => j,
-        _ => bad!(),
-    };
-    name = &name[i..j];
+    name = &name[..i];
     match name.parse::<u64>() {
         Ok(time) => Ok(time),
         _ => bad!(),
