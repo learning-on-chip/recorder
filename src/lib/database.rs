@@ -1,10 +1,14 @@
 use sqlite;
 use std::path::Path;
+use std::thread;
 
 use {Options, Result};
 
 pub const DEFAULT_FILE: &'static str = "bullet.sqlite3";
 pub const DEFAULT_TABLE: &'static str = "bullet";
+
+pub const FAIL_SLEEP_MS: u32 = 50;
+pub const FAIL_ATTEMPTS: usize = 10;
 
 macro_rules! create_sql(
     ($table:expr, $fields:expr) => (
@@ -49,7 +53,10 @@ impl<'l> Database<'l> {
             Some(ref value) => ok!(sqlite::open(&Path::new(value))),
             _ => ok!(sqlite::open(&Path::new(DEFAULT_FILE))),
         };
-        ok!(backend.set_busy_handler(|_| true));
+        ok!(backend.set_busy_handler(|_| {
+            thread::sleep_ms(FAIL_SLEEP_MS);
+            true
+        }));
         Ok(Database {
             backend: backend,
             table: match options.get::<String>("table") {
@@ -106,12 +113,22 @@ impl<'l> Recorder<'l> {
             }
         }
 
-        ok!(self.backend.reset());
-        ok!(self.backend.bind(&bindings));
-
-        match ok!(self.backend.step()) {
-            State::Done => Ok(()),
-            _ => raise!("cannot write data into the database"),
+        let mut success = false;
+        for _ in 0..FAIL_ATTEMPTS {
+            ok!(self.backend.reset());
+            ok!(self.backend.bind(&bindings));
+            match self.backend.step() {
+                Ok(state) if state == State::Done => {
+                    success = true;
+                    break;
+                },
+                _ => thread::sleep_ms(FAIL_SLEEP_MS),
+            }
         }
+        if !success {
+            raise!("cannot write into the database");
+        }
+
+        Ok(())
     }
 }
