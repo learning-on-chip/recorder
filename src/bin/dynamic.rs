@@ -9,7 +9,7 @@ use support;
 const HALT_MESSAGE: &'static str = "bullet:halt";
 
 const USAGE: &'static str = "
-Usage: bullet power [options]
+Usage: bullet dynamic [options]
 
 Options:
     --server   HOST:PORT     Redis server (default 127.0.0.0:6379).
@@ -24,15 +24,6 @@ Options:
 
 pub fn execute(options: &Options) -> Result<()> {
     use mcpat::Component;
-
-    macro_rules! push(
-        ($columns:expr, $items:expr) => ({
-            for item in $items {
-                $columns.push(ColumnValue::Float(item.dynamic_power()));
-                $columns.push(ColumnValue::Float(item.leakage_power()));
-            }
-        });
-    );
 
     if options.get::<bool>("help").unwrap_or(false) {
         ::usage(USAGE);
@@ -60,8 +51,8 @@ pub fn execute(options: &Options) -> Result<()> {
             Some(ref mut recorder) => recorder,
             _ => {
                 let (cores, l3s) = (system.cores(), system.l3s());
-                let names = support::generate(&[(&["core#_dynamic", "core#_leakage"], cores),
-                                                (&["l3#_dynamic", "l3#_leakage"], l3s)]);
+                let names = support::generate(&[(&["core#_dynamic_power"], cores),
+                                                (&["l3#_dynamic_power"], l3s)]);
 
                 let mut columns = vec![];
                 columns.push((ColumnKind::Integer, "time"));
@@ -76,6 +67,14 @@ pub fn execute(options: &Options) -> Result<()> {
 
         let processor = try!(system.compute());
 
+        macro_rules! push(
+            ($columns:expr, $items:expr) => ({
+                for item in $items {
+                    $columns.push(ColumnValue::Float(item.dynamic_power()));
+                }
+            });
+        );
+
         let mut columns = vec![ColumnValue::Integer(time as i64)];
         push!(columns, processor.cores());
         push!(columns, processor.l3s());
@@ -86,29 +85,36 @@ pub fn execute(options: &Options) -> Result<()> {
     Ok(())
 }
 
-// Format: power-{time}-{whatever}.xml
 pub fn derive_time(path: &Path) -> Result<u64> {
     macro_rules! bad(
         () => (raise!("encountered a malformed file path"));
     );
-    let mut name = match path.file_name() {
+    let name = match path.file_name() {
         Some(name) => match name.to_str() {
             Some(name) => name,
             _ => bad!(),
         },
         _ => bad!(),
     };
-    if !name.starts_with("power-") || !name.ends_with(".xml") {
-        bad!();
+    match name.split('-').skip(1).next() {
+        Some(time) => match time.parse::<u64>() {
+            Ok(time) => Ok(time),
+            _ => bad!(),
+        },
+        _ => bad!(),
     }
-    name = &name[6..];
-    let i = match name.find('-') {
-        Some(i) => i,
-        _ => bad!(),
-    };
-    name = &name[..i];
-    match name.parse::<u64>() {
-        Ok(time) => Ok(time),
-        _ => bad!(),
+}
+
+#[cfg(test)]
+mod tests {
+    use bullet::Result;
+    use std::path::Path;
+
+    #[test]
+    fn derive_time() {
+        match super::derive_time(&Path::new("foo-42-bar.xml")) {
+            Ok(number) if number == 42 => {},
+            _ => assert!(false),
+        }
     }
 }

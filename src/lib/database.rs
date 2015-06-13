@@ -35,12 +35,14 @@ pub struct Database<'l> {
 pub enum ColumnKind {
     Float,
     Integer,
+    Text,
 }
 
 #[derive(Clone, Copy)]
-pub enum ColumnValue {
+pub enum ColumnValue<'l> {
     Float(f64),
     Integer(i64),
+    Text(&'l str),
 }
 
 pub struct Recorder<'l> {
@@ -76,6 +78,7 @@ impl<'l> Database<'l> {
             match kind {
                 ColumnKind::Float => fields.push_str(" REAL"),
                 ColumnKind::Integer => fields.push_str(" INTEGER"),
+                ColumnKind::Text => fields.push_str(" TEXT"),
             }
         }
         ok!(self.backend.execute(&create_sql!(&self.table, &fields)));
@@ -102,7 +105,7 @@ impl<'l> Recorder<'l> {
         })
     }
 
-    pub fn write(&mut self, columns: &[ColumnValue]) -> Result<()> {
+    pub fn write<'c>(&mut self, columns: &[ColumnValue<'c>]) -> Result<()> {
         use sqlite::{Binding, State};
 
         let mut bindings = Vec::with_capacity(columns.len());
@@ -110,6 +113,7 @@ impl<'l> Recorder<'l> {
             match value {
                 ColumnValue::Float(value) => bindings.push(Binding::Float(i + 1, value)),
                 ColumnValue::Integer(value) => bindings.push(Binding::Integer(i + 1, value)),
+                ColumnValue::Text(value) => bindings.push(Binding::Text(i + 1, value)),
             }
         }
 

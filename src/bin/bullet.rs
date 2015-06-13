@@ -1,8 +1,10 @@
+#![cfg_attr(test, allow(dead_code, unused_imports))]
+
 #[macro_use] extern crate bullet;
 extern crate mcpat;
 
-mod area;
-mod power;
+mod dynamic;
+mod statik;
 mod support;
 
 use std::{env, process};
@@ -15,8 +17,8 @@ const USAGE: &'static str = "
 Usage: bullet <command> [options]
 
 Commands:
-    area           Record the area occupied by a system on a chip.
-    power          Record the power consumed of a system on a chip.
+    dynamic        Record the power consumed of a system on a chip.
+    static         Record the area occupied by a system on a chip.
 
 Options:
     --help         Display the usage information of a particular command.
@@ -33,8 +35,8 @@ fn main() {
         Err(error) => fail(error),
     };
     let result = match &command[..] {
-        "area" => area::execute(&options),
-        "power" => power::execute(&options),
+        "dynamic" => dynamic::execute(&options),
+        "static" => statik::execute(&options),
         _ => fail("the command is unknown"),
     };
     match result {

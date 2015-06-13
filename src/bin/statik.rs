@@ -6,7 +6,7 @@ use bullet::database::{ColumnKind, ColumnValue, Database};
 use support;
 
 const USAGE: &'static str = "
-Usage: bullet area [options]
+Usage: bullet static [options]
 
 Options:
     --config   PATH          McPAT configuration file (required).
@@ -23,14 +23,6 @@ Options:
 pub fn execute(options: &Options) -> Result<()> {
     use mcpat::Component;
 
-    macro_rules! push(
-        ($columns:expr, $items:expr) => ({
-            for item in $items {
-                $columns.push(ColumnValue::Float(item.area()));
-            }
-        });
-    );
-
     if options.get::<bool>("help").unwrap_or(false) {
         ::usage(USAGE);
     }
@@ -43,25 +35,31 @@ pub fn execute(options: &Options) -> Result<()> {
     };
 
     let database = try!(Database::open(options));
-    let mut recorder = {
-        let (cores, l3s) = (system.cores(), system.l3s());
-        let names = support::generate(&[(&["core#"], cores), (&["l3#"], l3s)]);
+    let mut recorder = try!(database.record(&[(ColumnKind::Text, "name"),
+                                              (ColumnKind::Float, "value")]));
 
-        let mut columns: Vec<(ColumnKind, &str)> = vec![];
-        for name in names.iter() {
-            columns.push((ColumnKind::Float, name));
-        }
-
-        try!(database.record(&columns))
-    };
+    let (cores, l3s) = (system.cores(), system.l3s());
+    let names = support::generate(&[(&["core#_area", "core#_leakage_power"], cores),
+                                    (&["l3#_area", "l3#_leakage_power"], l3s)]);
 
     let processor = try!(system.compute());
 
-    let mut columns = vec![];
-    push!(columns, processor.cores());
-    push!(columns, processor.l3s());
+    macro_rules! write(
+        ($recorder:expr, $items:expr, $names:expr, $counter:expr) => (
+            for item in $items {
+                try!($recorder.write(&[ColumnValue::Text(&names[$counter]),
+                                       ColumnValue::Float(item.area())]));
+                $counter += 1;
+                try!($recorder.write(&[ColumnValue::Text(&names[$counter]),
+                                       ColumnValue::Float(item.leakage_power())]));
+                $counter += 1;
+            }
+        );
+    );
 
-    try!(recorder.write(&columns));
+    let mut k = 0;
+    write!(recorder, processor.cores(), names, k);
+    write!(recorder, processor.l3s(), names, k);
 
     Ok(())
 }

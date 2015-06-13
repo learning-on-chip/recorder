@@ -10,7 +10,6 @@ path = "src/lib/bullet.rs"
 [[bin]]
 name = "bullet"
 path = "src/bin/bullet.rs"
-test = false
 doc = false
 
 [dependencies]
