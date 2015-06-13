@@ -10,8 +10,13 @@ Usage: bullet area [options]
 
 Options:
     --config   PATH          McPAT configuration file (required).
+
     --database PATH          SQLite3 database (default bullet.sqlite3).
     --table    NAME          Table name for dumping results (default bullet).
+
+    --caching                Enable caching of McPAT optimization results.
+    --server   HOST:PORT     Redis server (default 127.0.0.0:6379).
+
     --help                   Display this message.
 ";
 

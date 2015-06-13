@@ -15,8 +15,10 @@ Options:
     --server   HOST:PORT     Redis server (default 127.0.0.0:6379).
     --queue    NAME          Queue for distributing jobs (default bullet).
     --caching                Enable caching of McPAT optimization results.
+
     --database PATH          SQLite3 database (default bullet.sqlite3).
     --table    NAME          Table name for dumping results (default bullet).
+
     --help                   Display this message.
 ";
 
