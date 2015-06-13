@@ -62,7 +62,7 @@ pub fn execute(options: &Options) -> Result<()> {
 
                 recorder = Some(try!(database.record(&columns)));
                 recorder.as_mut().unwrap()
-            }
+            },
         };
 
         let processor = try!(system.compute());
