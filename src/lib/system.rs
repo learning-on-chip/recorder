@@ -1,7 +1,8 @@
 use mcpat;
+use options::Options;
 use std::path::Path;
 
-use {Address, Options, Result};
+use {Address, Result};
 
 pub struct System {
     backend: mcpat::System,
@@ -27,8 +28,8 @@ impl System {
         mcpat::optimze_for_clock_rate(true);
 
         if options.get::<bool>("caching").unwrap_or(false) {
-            match options.get::<Address>("server") {
-                Some((ref host, port)) => ok!(mcpat::caching::activate(host, port)),
+            match options.get_ref::<String>("server").and_then(|s| Address::parse(s)) {
+                Some(Address(ref host, port)) => ok!(mcpat::caching::activate(host, port)),
                 _ => ok!(mcpat::caching::activate(DEFAULT_HOST, DEFAULT_PORT)),
             }
         }

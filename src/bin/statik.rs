@@ -1,6 +1,7 @@
-use std::path::PathBuf;
+use options::Options;
+use std::path::Path;
 
-use bullet::{Options, Result, System};
+use bullet::{Result, System};
 use bullet::database::{ColumnKind, ColumnValue, Database};
 
 use support;
@@ -29,8 +30,8 @@ pub fn execute(options: &Options) -> Result<()> {
 
     try!(System::setup(options));
 
-    let system = match options.get::<PathBuf>("config") {
-        Some(ref config) => try!(System::open(config)),
+    let system = match options.get_ref::<String>("config") {
+        Some(config) => try!(System::open(&Path::new(config))),
         _ => raise!("a configuration file of McPAT is required"),
     };
 

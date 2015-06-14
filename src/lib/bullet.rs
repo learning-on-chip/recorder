@@ -1,8 +1,8 @@
 extern crate hiredis;
 extern crate mcpat;
+extern crate options;
 extern crate sqlite;
 
-pub type Address = (String, usize);
 pub type Error = Box<std::fmt::Display>;
 pub type Result<T> = std::result::Result<T, Error>;
 
@@ -23,11 +23,12 @@ macro_rules! ok(
     );
 );
 
-mod options;
+mod address;
 mod system;
 
+pub mod arguments;
 pub mod database;
 pub mod server;
 
-pub use options::{Options, OptionValue};
+pub use address::Address;
 pub use system::System;

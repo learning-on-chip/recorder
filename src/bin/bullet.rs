@@ -2,6 +2,7 @@
 
 #[macro_use] extern crate bullet;
 extern crate mcpat;
+extern crate options;
 
 mod dynamic;
 mod statik;
@@ -11,7 +12,7 @@ use std::{env, process};
 use std::fmt::Display;
 use std::io::{self, Write};
 
-use bullet::Options;
+use bullet::arguments;
 
 const USAGE: &'static str = "
 Usage: bullet <command> [options]
@@ -30,7 +31,7 @@ fn main() {
         Some(command) => command,
         _ => usage(USAGE),
     };
-    let options = match Options::parse(arguments) {
+    let options = match arguments::parse(arguments) {
         Ok(options) => options,
         Err(error) => fail(error),
     };

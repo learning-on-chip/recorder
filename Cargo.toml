@@ -15,4 +15,5 @@ doc = false
 [dependencies]
 hiredis = "*"
 mcpat = { version = "*", features = ["caching"] }
+options = "*"
 sqlite = "*"

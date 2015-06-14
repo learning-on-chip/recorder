@@ -1,8 +1,9 @@
+use options::Options;
 use sqlite;
 use std::path::Path;
 use std::thread;
 
-use {Options, Result};
+use Result;
 
 pub const DEFAULT_FILE: &'static str = "bullet.sqlite3";
 pub const DEFAULT_TABLE: &'static str = "bullet";
@@ -51,8 +52,8 @@ pub struct Recorder<'l> {
 
 impl<'l> Database<'l> {
     pub fn open(options: &Options) -> Result<Database<'l>> {
-        let mut backend = match options.get::<String>("database") {
-            Some(ref value) => ok!(sqlite::open(&Path::new(value))),
+        let mut backend = match options.get_ref::<String>("database") {
+            Some(database) => ok!(sqlite::open(&Path::new(database))),
             _ => ok!(sqlite::open(&Path::new(DEFAULT_FILE))),
         };
         ok!(backend.set_busy_handler(|_| {
@@ -61,8 +62,8 @@ impl<'l> Database<'l> {
         }));
         Ok(Database {
             backend: backend,
-            table: match options.get::<String>("table") {
-                Some(table) => table,
+            table: match options.get_ref::<String>("table") {
+                Some(table) => table.to_string(),
                 _ => String::from(DEFAULT_TABLE),
             },
         })

@@ -1,6 +1,7 @@
+use options::Options;
 use std::path::{Path, PathBuf};
 
-use bullet::{Options, Result, System};
+use bullet::{Result, System};
 use bullet::database::{ColumnKind, ColumnValue, Database};
 use bullet::server::Server;
 
