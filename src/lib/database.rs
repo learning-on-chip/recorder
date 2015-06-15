@@ -35,14 +35,12 @@ pub struct Database<'l> {
 #[derive(Clone, Copy)]
 pub enum ColumnKind {
     Float,
-    Integer,
     Text,
 }
 
 #[derive(Clone, Copy)]
 pub enum ColumnValue<'l> {
     Float(f64),
-    Integer(i64),
     Text(&'l str),
 }
 
@@ -78,7 +76,6 @@ impl<'l> Database<'l> {
             fields.push_str(name);
             match kind {
                 ColumnKind::Float => fields.push_str(" REAL"),
-                ColumnKind::Integer => fields.push_str(" INTEGER"),
                 ColumnKind::Text => fields.push_str(" TEXT"),
             }
         }
@@ -113,7 +110,6 @@ impl<'l> Recorder<'l> {
         for (i, &value) in columns.iter().enumerate() {
             match value {
                 ColumnValue::Float(value) => bindings.push(Binding::Float(i + 1, value)),
-                ColumnValue::Integer(value) => bindings.push(Binding::Integer(i + 1, value)),
                 ColumnValue::Text(value) => bindings.push(Binding::Text(i + 1, value)),
             }
         }

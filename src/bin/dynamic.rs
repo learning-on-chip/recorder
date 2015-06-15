@@ -1,5 +1,5 @@
 use arguments::Options;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 use bullet::{Result, System};
 use bullet::database::{ColumnKind, ColumnValue, Database};
@@ -7,7 +7,8 @@ use bullet::server::Server;
 
 use support;
 
-const HALT_MESSAGE: &'static str = "bullet:halt";
+const MESSAGE_PREFIX: &'static str = "bullet:";
+const HALT_MESSAGE: &'static str = "halt";
 
 const USAGE: &'static str = "
 Usage: bullet dynamic [options]
@@ -38,14 +39,16 @@ pub fn execute(options: &Options) -> Result<()> {
 
     loop {
         let message = ok!(server.receive());
-
-        match &message[..] {
-            HALT_MESSAGE => break,
-            _ => {},
+        if !message.starts_with(MESSAGE_PREFIX) {
+            raise!("received a malformed message");
         }
 
-        let config = PathBuf::from(message);
-        let time = try!(derive_time(&config));
+        let message = &message[MESSAGE_PREFIX.len()..];
+        if message == HALT_MESSAGE {
+            break;
+        }
+
+        let (time, config) = try!(decode(message));
         let system = try!(System::open(&config));
 
         let recorder = match recorder {
@@ -56,7 +59,7 @@ pub fn execute(options: &Options) -> Result<()> {
                                                 (&["l3#_dynamic_power"], l3s)]);
 
                 let mut columns = vec![];
-                columns.push((ColumnKind::Integer, "time"));
+                columns.push((ColumnKind::Float, "time"));
                 for name in names.iter() {
                     columns.push((ColumnKind::Float, name));
                 }
@@ -76,7 +79,7 @@ pub fn execute(options: &Options) -> Result<()> {
             });
         );
 
-        let mut columns = vec![ColumnValue::Integer(time as i64)];
+        let mut columns = vec![ColumnValue::Float(time)];
         push!(columns, processor.cores());
         push!(columns, processor.l3s());
 
@@ -86,35 +89,24 @@ pub fn execute(options: &Options) -> Result<()> {
     Ok(())
 }
 
-pub fn derive_time(path: &Path) -> Result<u64> {
-    macro_rules! bad(
-        () => (raise!("encountered a malformed file path"));
-    );
-    let name = match path.file_name() {
-        Some(name) => match name.to_str() {
-            Some(name) => name,
-            _ => bad!(),
-        },
-        _ => bad!(),
-    };
-    match name.split('-').skip(1).next() {
-        Some(time) => match time.parse::<u64>() {
-            Ok(time) => Ok(time),
-            _ => bad!(),
-        },
-        _ => bad!(),
+fn decode(message: &str) -> Result<(f64, PathBuf)> {
+    match message.find(';') {
+        Some(i) => Ok((ok!((&message[..i]).parse::<f64>()), PathBuf::from(&message[(i + 1)..]))),
+        _ => raise!("received a malformed message"),
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use bullet::Result;
-    use std::path::Path;
+    use std::path::PathBuf;
 
     #[test]
-    fn derive_time() {
-        match super::derive_time(&Path::new("foo-42-bar.xml")) {
-            Ok(number) if number == 42 => {},
+    fn decode() {
+        match super::decode("1.2e3;/foo/bar") {
+            Ok((time, path)) => {
+                assert_eq!(time, 1200f64);
+                assert_eq!(path, PathBuf::from("/foo/bar"));
+            },
             _ => assert!(false),
         }
     }
