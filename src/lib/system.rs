@@ -1,5 +1,5 @@
+use arguments::Options;
 use mcpat;
-use options::Options;
 use std::path::Path;
 
 use {Address, Result};

@@ -1,6 +1,6 @@
+extern crate arguments;
 extern crate hiredis;
 extern crate mcpat;
-extern crate options;
 extern crate sqlite;
 
 pub type Error = Box<std::fmt::Display>;
@@ -26,7 +26,6 @@ macro_rules! ok(
 mod address;
 mod system;
 
-pub mod arguments;
 pub mod database;
 pub mod server;
 

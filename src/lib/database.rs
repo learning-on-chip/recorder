@@ -1,4 +1,4 @@
-use options::Options;
+use arguments::Options;
 use sqlite;
 use std::path::Path;
 use std::thread;

@@ -1,18 +1,19 @@
 #![cfg_attr(test, allow(dead_code, unused_imports))]
 
-#[macro_use] extern crate bullet;
+extern crate arguments;
 extern crate mcpat;
-extern crate options;
+
+#[macro_use]
+extern crate bullet;
 
 mod dynamic;
 mod statik;
 mod support;
 
+use arguments::Arguments;
 use std::{env, process};
 use std::fmt::Display;
 use std::io::{self, Write};
-
-use bullet::arguments;
 
 const USAGE: &'static str = "
 Usage: bullet <command> [options]
@@ -26,16 +27,14 @@ Options:
 ";
 
 fn main() {
-    let mut arguments = env::args().skip(1);
-    let command = match arguments.next() {
-        Some(command) => command,
+    let Arguments { options, orphans, .. } = match Arguments::parse(env::args()) {
+        Ok(arguments) => arguments,
         _ => usage(USAGE),
     };
-    let options = match arguments::parse(arguments) {
-        Ok(options) => options,
-        Err(error) => fail(error),
-    };
-    let result = match &command[..] {
+    if orphans.len() != 1 {
+        usage(USAGE);
+    }
+    let result = match &orphans[0][..] {
         "dynamic" => dynamic::execute(&options),
         "static" => statik::execute(&options),
         _ => fail("the command is unknown"),

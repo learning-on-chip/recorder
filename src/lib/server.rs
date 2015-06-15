@@ -1,4 +1,4 @@
-use options::Options;
+use arguments::Options;
 use hiredis;
 
 use {Address, Result};

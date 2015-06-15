@@ -1,4 +1,4 @@
-use options::Options;
+use arguments::Options;
 use std::path::Path;
 
 use bullet::{Result, System};

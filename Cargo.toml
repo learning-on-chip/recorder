@@ -13,7 +13,7 @@ path = "src/bin/bullet.rs"
 doc = false
 
 [dependencies]
+arguments = "*"
 hiredis = "*"
 mcpat = { version = "*", features = ["caching"] }
-options = "*"
 sqlite = "*"
