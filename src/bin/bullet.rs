@@ -27,7 +27,7 @@ Options:
 ";
 
 fn main() {
-    let Arguments { options, orphans, .. } = match Arguments::parse(env::args()) {
+    let Arguments { options, orphans, .. } = match arguments::parse(env::args()) {
         Ok(arguments) => arguments,
         _ => usage(USAGE),
     };
