@@ -2,7 +2,7 @@
 name = "bullet"
 version = "0.0.1"
 dependencies = [
- "arguments 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "arguments 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hiredis 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "mcpat 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sqlite 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -10,7 +10,7 @@ dependencies = [
 
 [[package]]
 name = "arguments"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "options 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
