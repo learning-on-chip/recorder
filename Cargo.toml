@@ -1,15 +1,15 @@
 [package]
-name = "squire"
+name = "recorder"
 version = "0.0.1"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 
 [lib]
-name = "squire"
-path = "src/lib/squire.rs"
+name = "recorder"
+path = "src/lib/recorder.rs"
 
 [[bin]]
-name = "squire"
-path = "src/bin/squire.rs"
+name = "recorder"
+path = "src/bin/recorder.rs"
 doc = false
 
 [dependencies]

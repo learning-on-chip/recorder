@@ -4,7 +4,7 @@ extern crate arguments;
 extern crate mcpat;
 
 #[macro_use]
-extern crate squire;
+extern crate recorder;
 
 mod dynamic;
 mod statik;
@@ -16,7 +16,7 @@ use std::fmt::Display;
 use std::io::{self, Write};
 
 const USAGE: &'static str = "
-Usage: squire <command> [options]
+Usage: recorder <command> [options]
 
 Commands:
     dynamic        Record the power consumed by a system on a chip.

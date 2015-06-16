@@ -1,13 +1,13 @@
 use arguments::Options;
 use std::path::Path;
 
-use squire::{Result, System};
-use squire::database::{ColumnKind, ColumnValue, Database};
+use recorder::{Result, System};
+use recorder::database::{ColumnKind, ColumnValue, Database};
 
 use support;
 
 const USAGE: &'static str = "
-Usage: squire static [options]
+Usage: recorder static [options]
 
 Options:
     --config   PATH          McPAT configuration file (required).

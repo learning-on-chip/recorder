@@ -1,17 +1,17 @@
 use arguments::Options;
 use std::path::PathBuf;
 
-use squire::{Result, System};
-use squire::database::{ColumnKind, ColumnValue, Database};
-use squire::server::Server;
+use recorder::{Result, System};
+use recorder::database::{ColumnKind, ColumnValue, Database};
+use recorder::server::Server;
 
 use support;
 
-const MESSAGE_PREFIX: &'static str = "squire:";
+const MESSAGE_PREFIX: &'static str = "recorder:";
 const HALT_MESSAGE: &'static str = "halt";
 
 const USAGE: &'static str = "
-Usage: squire dynamic [options]
+Usage: recorder dynamic [options]
 
 Options:
     --queue    NAME          Queue for distributing jobs (required).
