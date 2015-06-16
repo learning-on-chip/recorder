@@ -19,7 +19,7 @@ const USAGE: &'static str = "
 Usage: squire <command> [options]
 
 Commands:
-    dynamic        Record the power consumed of a system on a chip.
+    dynamic        Record the power consumed by a system on a chip.
     static         Record the area occupied by a system on a chip.
 
 Options:
