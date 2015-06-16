@@ -5,8 +5,8 @@ use std::thread;
 
 use Result;
 
-pub const DEFAULT_FILE: &'static str = "bullet.sqlite3";
-pub const DEFAULT_TABLE: &'static str = "bullet";
+pub const DEFAULT_FILE: &'static str = "squire.sqlite3";
+pub const DEFAULT_TABLE: &'static str = "squire";
 
 pub const FAIL_SLEEP_MS: u32 = 50;
 pub const FAIL_ATTEMPTS: usize = 10;

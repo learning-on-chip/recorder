@@ -1,25 +1,25 @@
 use arguments::Options;
 use std::path::PathBuf;
 
-use bullet::{Result, System};
-use bullet::database::{ColumnKind, ColumnValue, Database};
-use bullet::server::Server;
+use squire::{Result, System};
+use squire::database::{ColumnKind, ColumnValue, Database};
+use squire::server::Server;
 
 use support;
 
-const MESSAGE_PREFIX: &'static str = "bullet:";
+const MESSAGE_PREFIX: &'static str = "squire:";
 const HALT_MESSAGE: &'static str = "halt";
 
 const USAGE: &'static str = "
-Usage: bullet dynamic [options]
+Usage: squire dynamic [options]
 
 Options:
     --server   HOST:PORT     Redis server (default 127.0.0.0:6379).
-    --queue    NAME          Queue for distributing jobs (default bullet).
+    --queue    NAME          Queue for distributing jobs (default squire).
     --caching                Enable caching of McPAT optimization results.
 
-    --database PATH          SQLite3 database (default bullet.sqlite3).
-    --table    NAME          Table name for dumping results (default bullet).
+    --database PATH          SQLite3 database (default squire.sqlite3).
+    --table    NAME          Table name for dumping results (default squire).
 
     --help                   Display this message.
 ";

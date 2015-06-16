@@ -1,5 +1,5 @@
 [root]
-name = "bullet"
+name = "squire"
 version = "0.0.1"
 dependencies = [
  "arguments 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",

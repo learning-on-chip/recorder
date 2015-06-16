@@ -1,15 +1,15 @@
 [package]
-name = "bullet"
+name = "squire"
 version = "0.0.1"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 
 [lib]
-name = "bullet"
-path = "src/lib/bullet.rs"
+name = "squire"
+path = "src/lib/squire.rs"
 
 [[bin]]
-name = "bullet"
-path = "src/bin/bullet.rs"
+name = "squire"
+path = "src/bin/squire.rs"
 doc = false
 
 [dependencies]

@@ -1,5 +1,5 @@
 target = $(PWD)/target/release
-binary = $(target)/bullet
+binary = $(target)/squire
 sources := $(shell find src -name *.rs)
 
 ifneq ($(DESTDIR),)
@@ -23,7 +23,7 @@ build: $(binary)
 install: $(binary)
 	@mkdir -p $(root)/bin
 	@mkdir -p $(root)/lib
-	@cp $^ $(root)/bin/bullet
+	@cp $^ $(root)/bin/squire
 	@find $(target)/build -name lib*.$(library_suffix)* -exec cp {} $(root)/lib/ \;
 	@echo 'Well done! Now set your environment variables:'
 	@echo $(color)'export BULLET_ROOT="$(root)"'

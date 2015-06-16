@@ -1,19 +1,19 @@
 use arguments::Options;
 use std::path::Path;
 
-use bullet::{Result, System};
-use bullet::database::{ColumnKind, ColumnValue, Database};
+use squire::{Result, System};
+use squire::database::{ColumnKind, ColumnValue, Database};
 
 use support;
 
 const USAGE: &'static str = "
-Usage: bullet static [options]
+Usage: squire static [options]
 
 Options:
     --config   PATH          McPAT configuration file (required).
 
-    --database PATH          SQLite3 database (default bullet.sqlite3).
-    --table    NAME          Table name for dumping results (default bullet).
+    --database PATH          SQLite3 database (default squire.sqlite3).
+    --table    NAME          Table name for dumping results (default squire).
 
     --caching                Enable caching of McPAT optimization results.
     --server   HOST:PORT     Redis server (default 127.0.0.0:6379).
