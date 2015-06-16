@@ -5,9 +5,6 @@ use std::thread;
 
 use Result;
 
-pub const DEFAULT_FILE: &'static str = "squire.sqlite3";
-pub const DEFAULT_TABLE: &'static str = "squire";
-
 pub const FAIL_SLEEP_MS: u32 = 50;
 pub const FAIL_ATTEMPTS: usize = 10;
 
@@ -52,7 +49,7 @@ impl<'l> Database<'l> {
     pub fn open(options: &Options) -> Result<Database<'l>> {
         let mut backend = match options.get_ref::<String>("database") {
             Some(database) => ok!(sqlite::open(&Path::new(database))),
-            _ => ok!(sqlite::open(&Path::new(DEFAULT_FILE))),
+            _ => raise!("a database is required"),
         };
         ok!(backend.set_busy_handler(|_| {
             thread::sleep_ms(FAIL_SLEEP_MS);
@@ -62,7 +59,7 @@ impl<'l> Database<'l> {
             backend: backend,
             table: match options.get_ref::<String>("table") {
                 Some(table) => table.to_string(),
-                _ => String::from(DEFAULT_TABLE),
+                _ => raise!("a table name is required"),
             },
         })
     }

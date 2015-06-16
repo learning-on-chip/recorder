@@ -12,11 +12,11 @@ Usage: squire static [options]
 Options:
     --config   PATH          McPAT configuration file (required).
 
-    --database PATH          SQLite3 database (default squire.sqlite3).
-    --table    NAME          Table name for dumping results (default squire).
+    --database PATH          SQLite3 database (required).
+    --table    NAME          Table for storing results (required).
 
     --caching                Enable caching of McPAT optimization results.
-    --server   HOST:PORT     Redis server (default 127.0.0.0:6379).
+    --server   HOST:PORT     Redis server [default: 127.0.0.0:6379].
 
     --help                   Display this message.
 ";

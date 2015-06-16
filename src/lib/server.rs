@@ -5,7 +5,6 @@ use {Address, Result};
 
 pub const DEFAULT_HOST: &'static str = "127.0.0.1";
 pub const DEFAULT_PORT: usize = 6379;
-pub const DEFAULT_QUEUE: &'static str = "squire";
 
 pub struct Server {
     backend: hiredis::Context,
@@ -21,7 +20,7 @@ impl Server {
             },
             queue: match options.get_ref::<String>("queue") {
                 Some(queue) => queue.to_string(),
-                _ => String::from(DEFAULT_QUEUE),
+                _ => raise!("a queue name is required"),
             },
         })
     }

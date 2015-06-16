@@ -14,12 +14,12 @@ const USAGE: &'static str = "
 Usage: squire dynamic [options]
 
 Options:
-    --server   HOST:PORT     Redis server (default 127.0.0.0:6379).
-    --queue    NAME          Queue for distributing jobs (default squire).
+    --queue    NAME          Queue for distributing jobs (required).
     --caching                Enable caching of McPAT optimization results.
+    --server   HOST:PORT     Redis server [default: 127.0.0.0:6379].
 
-    --database PATH          SQLite3 database (default squire.sqlite3).
-    --table    NAME          Table name for dumping results (default squire).
+    --database PATH          SQLite3 database (required).
+    --table    NAME          Table for storing results (required).
 
     --help                   Display this message.
 ";
