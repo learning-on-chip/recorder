@@ -31,7 +31,7 @@ pub fn execute(options: &Options) -> Result<()> {
     try!(System::setup(options));
 
     let system = match options.get_ref::<String>("config") {
-        Some(config) => try!(System::open(&Path::new(config))),
+        Some(config) => try!(System::open(Path::new(config))),
         _ => raise!("a configuration file of McPAT is required"),
     };
 

@@ -36,13 +36,13 @@ fn start() -> Result<()> {
     }
 }
 
+fn help(message: &str) -> ! {
+    println!("{}\n", message.trim());
+    std::process::exit(0);
+}
+
 fn fail(error: Error) -> ! {
     use std::io::{stderr, Write};
     stderr().write_all(format!("Error: {}.\n", &*error).as_bytes()).unwrap();
     std::process::exit(1);
-}
-
-fn help(message: &str) -> ! {
-    println!("{}\n", message.trim());
-    std::process::exit(0);
 }
