@@ -25,7 +25,7 @@ pub fn execute(options: &Options) -> Result<()> {
     use mcpat::Component;
 
     if options.get::<bool>("help").unwrap_or(false) {
-        ::usage(USAGE);
+        ::help(USAGE);
     }
 
     try!(System::setup(options));

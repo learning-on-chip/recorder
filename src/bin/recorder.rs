@@ -27,7 +27,7 @@ fn main() {
 fn start() -> Result<()> {
     let arguments = ok!(arguments::parse(std::env::args()));
     if arguments.orphans.len() != 1 {
-        usage(USAGE);
+        help(USAGE);
     }
     match &arguments.orphans[0][..] {
         "dynamic" => dynamic::execute(&arguments.options),
@@ -42,7 +42,7 @@ fn fail(error: Error) -> ! {
     std::process::exit(1);
 }
 
-fn usage(message: &str) -> ! {
+fn help(message: &str) -> ! {
     println!("{}\n", message.trim());
     std::process::exit(0);
 }
