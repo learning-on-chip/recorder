@@ -101,20 +101,17 @@ impl<'l> Recorder<'l> {
     }
 
     pub fn write<'c>(&mut self, columns: &[ColumnValue<'c>]) -> Result<()> {
-        use sqlite::{Binding, State};
-
-        let mut bindings = Vec::with_capacity(columns.len());
-        for (i, &value) in columns.iter().enumerate() {
-            match value {
-                ColumnValue::Float(value) => bindings.push(Binding::Float(i + 1, value)),
-                ColumnValue::Text(value) => bindings.push(Binding::Text(i + 1, value)),
-            }
-        }
+        use sqlite::State;
 
         let mut success = false;
         for _ in 0..FAIL_ATTEMPTS {
             ok!(self.backend.reset());
-            ok!(self.backend.bind(&bindings));
+            for (i, &value) in columns.iter().enumerate() {
+                match value {
+                    ColumnValue::Float(value) => ok!(self.backend.bind(i + 1, value)),
+                    ColumnValue::Text(value) => ok!(self.backend.bind(i + 1, value)),
+                }
+            }
             match self.backend.step() {
                 Ok(state) if state == State::Done => {
                     success = true;
