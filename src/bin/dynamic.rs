@@ -14,12 +14,12 @@ const USAGE: &'static str = "
 Usage: recorder dynamic [options]
 
 Options:
-    --queue    NAME          Queue for distributing jobs (required).
+    --queue <name>           Queue for distributing jobs (required).
     --caching                Enable caching of McPAT optimization results.
-    --server   HOST:PORT     Redis server [default: 127.0.0.0:6379].
+    --server <host>:<port>   Redis server [default: 127.0.0.0:6379].
 
-    --database PATH          SQLite3 database (required).
-    --table    NAME          Table for storing results (required).
+    --database <path>        SQLite3 database (required).
+    --table <name>           Table for storing results (required).
 
     --help                   Display this message.
 ";

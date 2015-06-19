@@ -10,13 +10,13 @@ const USAGE: &'static str = "
 Usage: recorder static [options]
 
 Options:
-    --config   PATH          McPAT configuration file (required).
+    --config <path>          McPAT configuration file (required).
 
-    --database PATH          SQLite3 database (required).
-    --table    NAME          Table for storing results (required).
+    --database <path>        SQLite3 database (required).
+    --table <name>           Table for storing results (required).
 
     --caching                Enable caching of McPAT optimization results.
-    --server   HOST:PORT     Redis server [default: 127.0.0.0:6379].
+    --server <host>:<port>   Redis server [default: 127.0.0.0:6379].
 
     --help                   Display this message.
 ";
