@@ -10,7 +10,7 @@ pub struct System {
 
 impl System {
     #[inline]
-    pub fn open(path: &Path) -> Result<System> {
+    pub fn open<T: AsRef<Path>>(path: T) -> Result<System> {
         let backend = ok!(mcpat::open(path));
         {
             let system = backend.raw();

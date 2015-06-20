@@ -1,6 +1,5 @@
 use arguments::Options;
 use sqlite;
-use std::path::Path;
 use std::thread;
 
 use Result;
@@ -48,7 +47,7 @@ pub struct Recorder<'l> {
 impl<'l> Database<'l> {
     pub fn open(options: &Options) -> Result<Database<'l>> {
         let mut backend = match options.get_ref::<String>("database") {
-            Some(database) => ok!(sqlite::open(Path::new(database))),
+            Some(database) => ok!(sqlite::open(database)),
             _ => raise!("a database is required"),
         };
         ok!(backend.set_busy_handler(|_| {

@@ -4,7 +4,7 @@ version = "0.0.1"
 dependencies = [
  "arguments 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hiredis 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "mcpat 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "mcpat 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "sqlite 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -40,7 +40,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "mcpat"
-version = "0.8.0"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "hiredis 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
