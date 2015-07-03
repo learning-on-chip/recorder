@@ -4,8 +4,6 @@ use std::path::Path;
 use recorder::{Result, System};
 use recorder::database::{ColumnKind, ColumnValue, Database};
 
-use support;
-
 const USAGE: &'static str = "
 Usage: recorder static [options]
 
@@ -30,37 +28,39 @@ pub fn execute(options: &Options) -> Result<()> {
 
     try!(System::setup(options));
 
+    let database = try!(Database::open(options, &[
+        ("component_id", ColumnKind::Integer),
+        ("name", ColumnKind::Text),
+        ("area", ColumnKind::Float),
+        ("leakage_power", ColumnKind::Float),
+    ]));
+    let mut statement = try!(database.prepare());
+
     let system = match options.get_ref::<String>("config") {
         Some(config) => try!(System::open(Path::new(config))),
         _ => raise!("a configuration file of McPAT is required"),
     };
-
-    let database = try!(Database::open(options));
-    let mut recorder = try!(database.record(&[(ColumnKind::Text, "name"),
-                                              (ColumnKind::Float, "value")]));
-
-    let (cores, l3s) = (system.cores(), system.l3s());
-    let names = support::generate(&[(&["core#_area", "core#_leakage_power"], cores),
-                                    (&["l3#_area", "l3#_leakage_power"], l3s)]);
-
     let processor = try!(system.compute());
 
+    let mut component_id = 0;
+
     macro_rules! write(
-        ($recorder:expr, $items:expr, $names:expr, $counter:expr) => (
-            for item in $items {
-                try!($recorder.write(&[ColumnValue::Text(&names[$counter]),
-                                       ColumnValue::Float(item.area())]));
-                $counter += 1;
-                try!($recorder.write(&[ColumnValue::Text(&names[$counter]),
-                                       ColumnValue::Float(item.leakage_power())]));
-                $counter += 1;
+        ($components:expr, $kind:expr) => (
+            for component in $components {
+                let name = format!("{}{}", $kind, component_id);
+                try!(statement.write(&[
+                    ColumnValue::Integer(component_id),
+                    ColumnValue::Text(&name),
+                    ColumnValue::Float(component.area()),
+                    ColumnValue::Float(component.leakage_power()),
+                ]));
+                component_id += 1;
             }
         );
     );
 
-    let mut k = 0;
-    write!(recorder, processor.cores(), names, k);
-    write!(recorder, processor.l3s(), names, k);
+    write!(processor.cores(), "core");
+    write!(processor.l3s(), "l3");
 
     Ok(())
 }

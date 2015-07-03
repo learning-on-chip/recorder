@@ -5,8 +5,6 @@ use recorder::{Result, System};
 use recorder::database::{ColumnKind, ColumnValue, Database};
 use recorder::server::Server;
 
-use support;
-
 const MESSAGE_PREFIX: &'static str = "recorder:";
 const HALT_MESSAGE: &'static str = "halt";
 
@@ -34,8 +32,12 @@ pub fn execute(options: &Options) -> Result<()> {
     try!(System::setup(options));
 
     let mut server = try!(Server::connect(options));
-    let database = try!(Database::open(options));
-    let mut recorder = None;
+    let database = try!(Database::open(options, &[
+        ("time", ColumnKind::Float),
+        ("component_id", ColumnKind::Integer),
+        ("dynamic_power", ColumnKind::Float),
+    ]));
+    let mut statement = try!(database.prepare());
 
     loop {
         let message = ok!(server.receive());
@@ -50,40 +52,25 @@ pub fn execute(options: &Options) -> Result<()> {
 
         let (time, config) = try!(decode(message));
         let system = try!(System::open(&config));
-
-        let recorder = match recorder {
-            Some(ref mut recorder) => recorder,
-            _ => {
-                let (cores, l3s) = (system.cores(), system.l3s());
-                let names = support::generate(&[(&["core#_dynamic_power"], cores),
-                                                (&["l3#_dynamic_power"], l3s)]);
-
-                let mut columns = vec![];
-                columns.push((ColumnKind::Float, "time"));
-                for name in names.iter() {
-                    columns.push((ColumnKind::Float, name));
-                }
-
-                recorder = Some(try!(database.record(&columns)));
-                recorder.as_mut().unwrap()
-            },
-        };
-
         let processor = try!(system.compute());
 
-        macro_rules! push(
-            ($columns:expr, $items:expr) => ({
-                for item in $items {
-                    $columns.push(ColumnValue::Float(item.dynamic_power()));
+        let mut component_id = 0;
+
+        macro_rules! write(
+            ($components:expr) => (
+                for component in $components {
+                    try!(statement.write(&[
+                        ColumnValue::Float(time),
+                        ColumnValue::Integer(component_id),
+                        ColumnValue::Float(component.dynamic_power()),
+                    ]));
+                    component_id += 1;
                 }
-            });
+            );
         );
 
-        let mut columns = vec![ColumnValue::Float(time)];
-        push!(columns, processor.cores());
-        push!(columns, processor.l3s());
-
-        try!(recorder.write(&columns));
+        write!(processor.cores());
+        write!(processor.l3s());
     }
 
     Ok(())

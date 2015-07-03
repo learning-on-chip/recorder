@@ -8,7 +8,6 @@ extern crate recorder;
 
 mod dynamic;
 mod statik;
-mod support;
 
 use recorder::{Error, Result};
 

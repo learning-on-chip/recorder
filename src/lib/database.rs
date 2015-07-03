@@ -7,45 +7,40 @@ use Result;
 pub const FAIL_SLEEP_MS: u32 = 50;
 pub const FAIL_ATTEMPTS: usize = 10;
 
-macro_rules! create_sql(
-    ($table:expr, $fields:expr) => (
-        format!(r#"
-CREATE TABLE IF NOT EXISTS {} (id INTEGER PRIMARY KEY AUTOINCREMENT, {});
-        "#, $table, $fields)
-    );
-);
-
-macro_rules! insert_sql(
-    ($table:expr, $fields:expr, $values:expr) => (
-        format!(r#"
-INSERT INTO {} ({}) VALUES ({});
-        "#, $table, $fields, $values)
-    );
-);
-
 pub struct Database<'l> {
-    backend: sqlite::Database<'l>,
     table: String,
+    columns: Vec<(String, ColumnKind)>,
+    backend: sqlite::Database<'l>,
 }
 
 #[derive(Clone, Copy)]
 pub enum ColumnKind {
     Float,
+    Integer,
     Text,
 }
 
 #[derive(Clone, Copy)]
 pub enum ColumnValue<'l> {
     Float(f64),
+    Integer(i64),
     Text(&'l str),
 }
 
-pub struct Recorder<'l> {
+pub struct Statement<'l> {
     backend: sqlite::Statement<'l>,
 }
 
 impl<'l> Database<'l> {
-    pub fn open(options: &Options) -> Result<Database<'l>> {
+    pub fn open(options: &Options, columns: &[(&str, ColumnKind)]) -> Result<Database<'l>> {
+        let table = match options.get_ref::<String>("table") {
+            Some(table) => table.to_string(),
+            _ => raise!("a table name is required"),
+        };
+
+        let columns = columns.iter().map(|&(name, kind)| (name.to_string(), kind))
+                                    .collect::<Vec<_>>();
+
         let mut backend = match options.get_ref::<String>("database") {
             Some(database) => ok!(sqlite::open(database)),
             _ => raise!("a database is required"),
@@ -54,38 +49,37 @@ impl<'l> Database<'l> {
             thread::sleep_ms(FAIL_SLEEP_MS);
             true
         }));
-        Ok(Database {
-            backend: backend,
-            table: match options.get_ref::<String>("table") {
-                Some(table) => table.to_string(),
-                _ => raise!("a table name is required"),
-            },
-        })
-    }
 
-    pub fn record(&'l self, columns: &[(ColumnKind, &str)]) -> Result<Recorder<'l>> {
         let mut fields = String::new();
-        for &(kind, name) in columns.iter() {
+        for &(ref name, kind) in columns.iter() {
             if !fields.is_empty() {
                 fields.push_str(", ");
             }
             fields.push_str(name);
             match kind {
                 ColumnKind::Float => fields.push_str(" REAL"),
+                ColumnKind::Integer => fields.push_str(" INTEGER"),
                 ColumnKind::Text => fields.push_str(" TEXT"),
             }
         }
-        ok!(self.backend.execute(&create_sql!(&self.table, &fields)));
+        ok!(backend.execute(&format!("
+            CREATE TABLE IF NOT EXISTS {} ({});
+        ", &table, &fields)));
 
-        Recorder::new(self, columns)
+        Ok(Database { table: table, columns: columns, backend: backend })
+    }
+
+    #[inline]
+    pub fn prepare(&'l self) -> Result<Statement<'l>> {
+        Statement::new(self)
     }
 }
 
-impl<'l> Recorder<'l> {
-    pub fn new(database: &'l Database, columns: &[(ColumnKind, &str)]) -> Result<Recorder<'l>> {
+impl<'l> Statement<'l> {
+    pub fn new(database: &'l Database) -> Result<Statement<'l>> {
         let mut fields = String::new();
         let mut values = String::new();
-        for &(_, name) in columns.iter() {
+        for &(ref name, _) in database.columns.iter() {
             if !fields.is_empty() {
                 fields.push_str(", ");
                 values.push_str(", ");
@@ -94,8 +88,10 @@ impl<'l> Recorder<'l> {
             values.push_str("?");
         }
 
-        Ok(Recorder {
-            backend: ok!(database.backend.prepare(&insert_sql!(&database.table, fields, values))),
+        Ok(Statement {
+            backend: ok!(database.backend.prepare(&format!("
+                INSERT INTO {} ({}) VALUES ({});
+            ", &database.table, fields, values))),
         })
     }
 
@@ -105,10 +101,12 @@ impl<'l> Recorder<'l> {
         let mut success = false;
         for _ in 0..FAIL_ATTEMPTS {
             ok!(self.backend.reset());
-            for (i, &value) in columns.iter().enumerate() {
+            for (mut i, &value) in columns.iter().enumerate() {
+                i += 1;
                 match value {
-                    ColumnValue::Float(value) => ok!(self.backend.bind(i + 1, value)),
-                    ColumnValue::Text(value) => ok!(self.backend.bind(i + 1, value)),
+                    ColumnValue::Float(value) => ok!(self.backend.bind(i, value)),
+                    ColumnValue::Integer(value) => ok!(self.backend.bind(i, value)),
+                    ColumnValue::Text(value) => ok!(self.backend.bind(i, value)),
                 }
             }
             match self.backend.step() {
