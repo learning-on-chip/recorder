@@ -10,7 +10,7 @@ pub const FAIL_ATTEMPTS: usize = 10;
 pub struct Database<'l> {
     table: String,
     columns: Vec<(String, ColumnKind)>,
-    backend: sqlite::Database<'l>,
+    backend: sqlite::Connection<'l>,
 }
 
 #[derive(Clone, Copy)]
