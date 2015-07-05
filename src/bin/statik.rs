@@ -46,8 +46,8 @@ pub fn execute(options: &Options) -> Result<()> {
 
     macro_rules! write(
         ($components:expr, $kind:expr) => (
-            for component in $components {
-                let name = format!("{}{}", $kind, component_id);
+            for (i, component) in $components.enumerate() {
+                let name = format!("{}{}", $kind, i);
                 try!(statement.write(&[
                     ColumnValue::Integer(component_id),
                     ColumnValue::Text(&name),
