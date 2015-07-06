@@ -36,7 +36,7 @@ fn start() -> Result<()> {
 }
 
 fn help(message: &str) -> ! {
-    println!("{}\n", message.trim());
+    println!("{}", message.trim());
     std::process::exit(0);
 }
 
