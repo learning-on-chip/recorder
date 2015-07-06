@@ -1,12 +1,14 @@
 #![cfg_attr(test, allow(dead_code, unused_imports))]
 
 extern crate arguments;
+extern crate log;
 extern crate mcpat;
 
 #[macro_use]
 extern crate recorder;
 
 mod dynamic;
+mod logger;
 mod statik;
 
 use recorder::{Error, Result};
@@ -20,6 +22,7 @@ Commands:
 ";
 
 fn main() {
+    logger::setup();
     start().unwrap_or_else(|error| fail(error));
 }
 

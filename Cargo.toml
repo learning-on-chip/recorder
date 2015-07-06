@@ -15,5 +15,6 @@ doc = false
 [dependencies]
 arguments = "*"
 hiredis = "*"
+log = "*"
 mcpat = { version = "*", features = ["caching"] }
 sqlite = "*"

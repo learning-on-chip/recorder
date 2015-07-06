@@ -46,6 +46,7 @@ impl<'l> Database<'l> {
             _ => raise!("a database is required"),
         };
         ok!(backend.set_busy_handler(|_| {
+            error!(target: "database", "Failed to execute a query. Trying again...");
             thread::sleep_ms(FAIL_SLEEP_MS);
             true
         }));
@@ -114,7 +115,10 @@ impl<'l> Statement<'l> {
                     success = true;
                     break;
                 },
-                _ => thread::sleep_ms(FAIL_SLEEP_MS),
+                _ => {
+                    error!(target: "database", "Failed to insert a record. Trying again...");
+                    thread::sleep_ms(FAIL_SLEEP_MS);
+                },
             }
         }
         if !success {

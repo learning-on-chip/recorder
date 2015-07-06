@@ -3,6 +3,9 @@ extern crate hiredis;
 extern crate mcpat;
 extern crate sqlite;
 
+#[macro_use]
+extern crate log;
+
 pub type Error = Box<std::fmt::Display>;
 pub type Result<T> = std::result::Result<T, Error>;
 
