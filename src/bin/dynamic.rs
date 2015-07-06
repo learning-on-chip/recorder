@@ -1,4 +1,4 @@
-use arguments::Options;
+use arguments::Arguments;
 use std::path::PathBuf;
 
 use recorder::{Result, System};
@@ -22,17 +22,17 @@ Options:
     --help                   Display this message.
 ";
 
-pub fn execute(options: &Options) -> Result<()> {
+pub fn execute(arguments: &Arguments) -> Result<()> {
     use mcpat::Component;
 
-    if options.get::<bool>("help").unwrap_or(false) {
+    if arguments.get::<bool>("help").unwrap_or(false) {
         ::help(USAGE);
     }
 
-    try!(System::setup(options));
+    try!(System::setup(arguments));
 
-    let mut server = try!(Server::connect(options));
-    let database = try!(Database::open(options, &[
+    let mut server = try!(Server::connect(arguments));
+    let database = try!(Database::open(arguments, &[
         ("time", ColumnKind::Float),
         ("component_id", ColumnKind::Integer),
         ("dynamic_power", ColumnKind::Float),

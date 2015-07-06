@@ -29,8 +29,8 @@ fn start() -> Result<()> {
         help(USAGE);
     }
     match &arguments.orphans[0][..] {
-        "dynamic" => dynamic::execute(&arguments.options),
-        "static" => statik::execute(&arguments.options),
+        "dynamic" => dynamic::execute(&arguments),
+        "static" => statik::execute(&arguments),
         _ => raise!("the command is unknown"),
     }
 }

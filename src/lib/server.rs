@@ -1,4 +1,4 @@
-use arguments::Options;
+use arguments::Arguments;
 use hiredis;
 
 use {Address, Result};
@@ -12,14 +12,14 @@ pub struct Server {
 }
 
 impl Server {
-    pub fn connect(options: &Options) -> Result<Server> {
+    pub fn connect(arguments: &Arguments) -> Result<Server> {
         Ok(Server {
-            backend: match options.get_ref::<String>("server").and_then(|s| Address::parse(s)) {
+            backend: match arguments.get::<String>("server").and_then(|s| Address::parse(&s)) {
                 Some(Address(ref host, port)) => ok!(hiredis::connect(host, port)),
                 _ => ok!(hiredis::connect(DEFAULT_HOST, DEFAULT_PORT)),
             },
-            queue: match options.get_ref::<String>("queue") {
-                Some(queue) => queue.to_string(),
+            queue: match arguments.get::<String>("queue") {
+                Some(queue) => queue,
                 _ => raise!("a queue name is required"),
             },
         })

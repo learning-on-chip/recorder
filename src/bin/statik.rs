@@ -1,4 +1,4 @@
-use arguments::Options;
+use arguments::Arguments;
 use std::path::Path;
 
 use recorder::{Result, System};
@@ -19,16 +19,16 @@ Options:
     --help                   Display this message.
 ";
 
-pub fn execute(options: &Options) -> Result<()> {
+pub fn execute(arguments: &Arguments) -> Result<()> {
     use mcpat::Component;
 
-    if options.get::<bool>("help").unwrap_or(false) {
+    if arguments.get::<bool>("help").unwrap_or(false) {
         ::help(USAGE);
     }
 
-    try!(System::setup(options));
+    try!(System::setup(arguments));
 
-    let database = try!(Database::open(options, &[
+    let database = try!(Database::open(arguments, &[
         ("component_id", ColumnKind::Integer),
         ("name", ColumnKind::Text),
         ("area", ColumnKind::Float),
@@ -36,8 +36,8 @@ pub fn execute(options: &Options) -> Result<()> {
     ]));
     let mut statement = try!(database.prepare());
 
-    let system = match options.get_ref::<String>("config") {
-        Some(config) => try!(System::open(Path::new(config))),
+    let system = match arguments.get::<String>("config") {
+        Some(ref config) => try!(System::open(Path::new(config))),
         _ => raise!("a configuration file of McPAT is required"),
     };
     let processor = try!(system.compute());

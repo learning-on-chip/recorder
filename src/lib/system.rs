@@ -1,4 +1,4 @@
-use arguments::Options;
+use arguments::Arguments;
 use mcpat;
 use std::path::Path;
 
@@ -22,13 +22,13 @@ impl System {
         Ok(System { backend: backend })
     }
 
-    pub fn setup(options: &Options) -> Result<()> {
+    pub fn setup(arguments: &Arguments) -> Result<()> {
         use server::{DEFAULT_HOST, DEFAULT_PORT};
 
         mcpat::optimze_for_clock_rate(true);
 
-        if options.get::<bool>("caching").unwrap_or(false) {
-            match options.get_ref::<String>("server").and_then(|s| Address::parse(s)) {
+        if arguments.get::<bool>("caching").unwrap_or(false) {
+            match arguments.get::<String>("server").and_then(|s| Address::parse(&s)) {
                 Some(Address(ref host, port)) => ok!(mcpat::caching::activate(host, port)),
                 _ => ok!(mcpat::caching::activate(DEFAULT_HOST, DEFAULT_PORT)),
             }

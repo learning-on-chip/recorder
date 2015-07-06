@@ -1,4 +1,4 @@
-use arguments::Options;
+use arguments::Arguments;
 use sqlite;
 use std::thread;
 
@@ -32,17 +32,17 @@ pub struct Statement<'l> {
 }
 
 impl<'l> Database<'l> {
-    pub fn open(options: &Options, columns: &[(&str, ColumnKind)]) -> Result<Database<'l>> {
-        let table = match options.get_ref::<String>("table") {
-            Some(table) => table.to_string(),
+    pub fn open(arguments: &Arguments, columns: &[(&str, ColumnKind)]) -> Result<Database<'l>> {
+        let table = match arguments.get::<String>("table") {
+            Some(table) => table,
             _ => raise!("a table name is required"),
         };
 
         let columns = columns.iter().map(|&(name, kind)| (name.to_string(), kind))
                                     .collect::<Vec<_>>();
 
-        let mut backend = match options.get_ref::<String>("database") {
-            Some(database) => ok!(sqlite::open(database)),
+        let mut backend = match arguments.get::<String>("database") {
+            Some(ref database) => ok!(sqlite::open(database)),
             _ => raise!("a database is required"),
         };
         ok!(backend.set_busy_handler(|_| {
