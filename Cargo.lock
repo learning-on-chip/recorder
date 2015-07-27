@@ -3,10 +3,10 @@ name = "recorder"
 version = "0.0.1"
 dependencies = [
  "arguments 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "hiredis 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hiredis 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "mcpat 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "sqlite 0.14.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "mcpat 0.8.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sqlite 0.14.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -19,7 +19,7 @@ dependencies = [
 
 [[package]]
 name = "hiredis"
-version = "0.2.1"
+version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "hiredis-sys 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -49,10 +49,10 @@ dependencies = [
 
 [[package]]
 name = "mcpat"
-version = "0.8.1"
+version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "hiredis 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hiredis 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "mcpat-sys 0.7.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -73,7 +73,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "sqlite"
-version = "0.14.0"
+version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "libc 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
