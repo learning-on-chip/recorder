@@ -10,7 +10,6 @@ path = "src/lib/recorder.rs"
 [[bin]]
 name = "recorder"
 path = "src/bin/recorder.rs"
-doc = false
 
 [dependencies]
 arguments = "*"
