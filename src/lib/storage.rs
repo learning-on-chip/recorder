@@ -1,7 +1,7 @@
 use arguments::Arguments;
 use database::Database;
 use database::driver::{Driver, SQLite, Statement};
-use database::query::{CreateTable, Insert};
+use database::statement::{CreateTable, InsertInto};
 
 pub use database::{Type, Value};
 
@@ -29,11 +29,11 @@ impl<'l> Storage<'l> {
             _ => raise!("a database is required"),
         };
 
-        let query = CreateTable::new().name(&table).if_not_exists();
-        let query = columns.iter().fold(query, |query, &(name, kind)| {
-            query.column(|column| column.name(name).kind(kind))
+        let statement = CreateTable::new().name(&table).if_not_exists();
+        let statement = columns.iter().fold(statement, |statement, &(name, kind)| {
+            statement.column(|column| column.name(name).kind(kind))
         });
-        ok!(backend.execute(query));
+        ok!(backend.execute(statement));
 
         let columns = columns.iter().map(|&(name, kind)| (name.to_string(), kind)).collect();
 
@@ -41,9 +41,11 @@ impl<'l> Storage<'l> {
     }
 
     pub fn writer(&self) -> Result<Writer<'l>> {
-        let query = Insert::new().table(&self.table);
-        let query = self.columns.iter().fold(query, |query, &(ref name, _)| query.column(name));
-        Ok(Writer { backend: ok!(self.backend.prepare(query)) })
+        let statement = InsertInto::new().table(&self.table);
+        let statement = self.columns.iter().fold(statement, |statement, &(ref name, _)| {
+            statement.column(name)
+        });
+        Ok(Writer { backend: ok!(self.backend.prepare(statement)) })
     }
 }
 
