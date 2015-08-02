@@ -1,7 +1,6 @@
 use arguments::Arguments;
 use database::Database;
-use database::driver::{Driver, SQLite, Statement};
-use database::statement::{CreateTable, InsertInto};
+use database::driver::sqlite;
 
 pub use database::{Type, Value};
 
@@ -10,15 +9,17 @@ use Result;
 pub struct Storage<'l> {
     table: String,
     columns: Vec<(String, Type)>,
-    backend: Database<SQLite<'l>>,
+    backend: Database<sqlite::Driver<'l>>,
 }
 
 pub struct Writer<'l> {
-    backend: <SQLite<'l> as Driver>::Statement,
+    backend: sqlite::Prepared<'l>,
 }
 
 impl<'l> Storage<'l> {
     pub fn open(arguments: &Arguments, columns: &[(&str, Type)]) -> Result<Storage<'l>> {
+        use database::language::*;
+
         let table = match arguments.get::<String>("table") {
             Some(table) => table,
             _ => raise!("a table name is required"),
@@ -29,9 +30,9 @@ impl<'l> Storage<'l> {
             _ => raise!("a database is required"),
         };
 
-        let statement = CreateTable::new().name(&table).if_not_exists();
+        let statement = create_table().name(&table).if_not_exists();
         let statement = columns.iter().fold(statement, |statement, &(name, kind)| {
-            statement.column(|column| column.name(name).kind(kind))
+            statement.column(column().name(name).kind(kind))
         });
         ok!(backend.execute(statement));
 
@@ -41,7 +42,9 @@ impl<'l> Storage<'l> {
     }
 
     pub fn writer(&self) -> Result<Writer<'l>> {
-        let statement = InsertInto::new().table(&self.table);
+        use database::language::*;
+
+        let statement = insert_into().table(&self.table);
         let statement = self.columns.iter().fold(statement, |statement, &(ref name, _)| {
             statement.column(name)
         });
@@ -52,6 +55,8 @@ impl<'l> Storage<'l> {
 impl<'l> Writer<'l> {
     #[inline]
     pub fn write(&mut self, values: &[Value]) -> Result<()> {
+        use database::driver::Prepared;
+
         ok!(self.backend.execute(values));
         Ok(())
     }
