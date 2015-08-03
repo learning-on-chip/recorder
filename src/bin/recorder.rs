@@ -17,8 +17,8 @@ const USAGE: &'static str = "
 Usage: recorder <command> [options]
 
 Commands:
-    dynamic        Record dynamic characteristics.
-    static         Record static characteristics.
+    dynamic        Record the power consumed by a system on a chip.
+    static         Record the area occupied by a system on a chip.
 ";
 
 fn main() {

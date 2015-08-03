@@ -1,7 +1,7 @@
 extern crate arguments;
-extern crate database;
 extern crate hiredis;
 extern crate mcpat;
+extern crate sqlite;
 
 #[macro_use]
 extern crate log;
@@ -29,8 +29,8 @@ macro_rules! ok(
 mod address;
 mod system;
 
+pub mod database;
 pub mod server;
-pub mod storage;
 
 pub use address::Address;
 pub use system::System;

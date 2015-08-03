@@ -1,9 +1,9 @@
 use arguments::Arguments;
 use std::path::PathBuf;
 
-use recorder::server::Server;
-use recorder::storage::{Storage, Type, Value};
 use recorder::{Result, System};
+use recorder::database::{ColumnKind, ColumnValue, Database};
+use recorder::server::Server;
 
 const MESSAGE_PREFIX: &'static str = "recorder:";
 const HALT_MESSAGE: &'static str = "halt";
@@ -32,10 +32,12 @@ pub fn execute(arguments: &Arguments) -> Result<()> {
     try!(System::setup(arguments));
 
     let mut server = try!(Server::connect(arguments));
-    let storage = try!(Storage::open(arguments, &[("time", Type::Float),
-                                                  ("component_id", Type::Integer),
-                                                  ("dynamic_power", Type::Float)]));
-    let mut writer = try!(storage.writer());
+    let database = try!(Database::open(arguments, &[
+        ("time", ColumnKind::Float),
+        ("component_id", ColumnKind::Integer),
+        ("dynamic_power", ColumnKind::Float),
+    ]));
+    let mut statement = try!(database.prepare());
 
     loop {
         let message = ok!(server.receive());
@@ -57,9 +59,11 @@ pub fn execute(arguments: &Arguments) -> Result<()> {
         macro_rules! write(
             ($components:expr) => (
                 for component in $components {
-                    try!(writer.write(&[Value::Float(time),
-                                        Value::Integer(component_id),
-                                        Value::Float(component.dynamic_power())]));
+                    try!(statement.write(&[
+                        ColumnValue::Float(time),
+                        ColumnValue::Integer(component_id),
+                        ColumnValue::Float(component.dynamic_power()),
+                    ]));
                     component_id += 1;
                 }
             );

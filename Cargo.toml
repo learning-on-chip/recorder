@@ -13,7 +13,7 @@ path = "src/bin/recorder.rs"
 
 [dependencies]
 arguments = "*"
-database = "*"
 hiredis = "*"
 log = "*"
 mcpat = { version = "*", features = ["caching"] }
+sqlite = "*"
