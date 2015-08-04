@@ -80,7 +80,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "sql"
 version = "0.0.1"
-source = "git+https://github.com/stainless-steel/sql.git#00514ae0366d9eeeb153a101ef7db8db370f40d4"
+source = "git+https://github.com/stainless-steel/sql.git#3873a0d8e1404da39ec0a39c55d8c2bef6dc909a"
 
 [[package]]
 name = "sqlite"

@@ -35,13 +35,13 @@ impl Database {
             true
         }));
 
-        let mut statement = create_table().name(&table).if_not_exists();
+        let mut statement = create_table(&table).if_not_exists();
         statement = columns.iter().fold(statement, |statement, &(name, kind)| {
-            statement.column(column().name(name).kind(kind))
+            statement.column(column(name).kind(kind))
         });
         ok!(connection.execute(ok!(statement.compile())));
 
-        let mut statement = insert_into().table(&table);
+        let mut statement = insert_into(&table);
         statement = columns.iter().fold(statement, |statement, &(ref name, _)| {
             statement.column(name)
         });
