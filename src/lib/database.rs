@@ -46,7 +46,7 @@ impl Database {
             statement.column(name)
         });
         let cursor = {
-            let cursor = ok!(ok!(connection.prepare(ok!(statement.compile()))).cursor());
+            let cursor = ok!(connection.prepare(ok!(statement.compile()))).cursor();
             let clone = unsafe { mem::transmute_copy(&cursor) };
             mem::forget(cursor);
             clone
