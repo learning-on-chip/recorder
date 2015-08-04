@@ -7,7 +7,7 @@ dependencies = [
  "log 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "mcpat 0.8.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "sql 0.0.1 (git+https://github.com/stainless-steel/sql.git)",
- "sqlite 0.19.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sqlite 0.19.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -84,7 +84,7 @@ source = "git+https://github.com/stainless-steel/sql.git#00514ae0366d9eeeb153a10
 
 [[package]]
 name = "sqlite"
-version = "0.19.3"
+version = "0.19.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "libc 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
