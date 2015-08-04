@@ -1,6 +1,7 @@
 extern crate arguments;
 extern crate hiredis;
 extern crate mcpat;
+extern crate sql;
 extern crate sqlite;
 
 #[macro_use]

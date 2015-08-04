@@ -16,4 +16,5 @@ arguments = "*"
 hiredis = "*"
 log = "*"
 mcpat = { version = "*", features = ["caching"] }
+sql = { git = "https://github.com/stainless-steel/sql.git" }
 sqlite = "*"
