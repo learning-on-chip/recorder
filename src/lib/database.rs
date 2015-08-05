@@ -37,7 +37,7 @@ impl Database {
 
         let mut statement = create_table(&table).if_not_exists();
         statement = columns.iter().fold(statement, |statement, &(name, kind)| {
-            statement.column(column(name).kind(kind))
+            statement.column(name.kind(kind))
         });
         ok!(connection.execute(ok!(statement.compile())));
 
