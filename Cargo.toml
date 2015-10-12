@@ -2,6 +2,7 @@
 name = "recorder"
 version = "0.0.1"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
+description = "Recorder is a tool for recording workload patterns."
 
 [lib]
 name = "recorder"
