@@ -4,6 +4,39 @@ Recorder is a tool for recording workload patterns.
 
 ## [Documentation][doc]
 
+## Usage
+
+```
+$ recorder dynamic --help
+Usage: recorder dynamic [options]
+
+Options:
+    --queue <name>           Queue for distributing jobs (required).
+    --caching                Enable caching of McPAT optimization results.
+    --server <host>:<port>   Redis server [default: 127.0.0.0:6379].
+
+    --database <path>        SQLite database (required).
+    --table <name>           Table for storing results (required).
+
+    --help                   Display this message.
+```
+
+```
+$ recorder static --help
+Usage: recorder static [options]
+
+Options:
+    --config <path>          McPAT configuration file (required).
+
+    --database <path>        SQLite database (required).
+    --table <name>           Table for storing results (required).
+
+    --caching                Enable caching of McPAT optimization results.
+    --server <host>:<port>   Redis server [default: 127.0.0.0:6379].
+
+    --help                   Display this message.
+```
+
 ## Contributing
 
 1. Fork the project.
