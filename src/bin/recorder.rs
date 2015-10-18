@@ -45,6 +45,6 @@ fn help(message: &str) -> ! {
 
 fn fail(error: Error) -> ! {
     use std::io::{stderr, Write};
-    stderr().write_all(format!("Error: {}.\n", &*error).as_bytes()).unwrap();
+    stderr().write_all(format!("Error: {}.\n", error).as_bytes()).unwrap();
     std::process::exit(1);
 }
