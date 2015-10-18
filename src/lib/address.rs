@@ -1,6 +1,8 @@
+/// An address composed of a host name and a port.
 pub struct Address(pub String, pub usize);
 
 impl Address {
+    /// Parse an address.
     pub fn parse(string: &str) -> Option<Address> {
         let chunks = string.split(':').collect::<Vec<_>>();
         match chunks.len() {

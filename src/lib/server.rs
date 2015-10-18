@@ -1,17 +1,24 @@
+//! Redis server.
+
 use arguments::Arguments;
 use hiredis;
 
 use {Address, Result};
 
+/// The default Redis host name.
 pub const DEFAULT_HOST: &'static str = "127.0.0.1";
+
+/// The default Redis port number.
 pub const DEFAULT_PORT: usize = 6379;
 
+/// A Redis server.
 pub struct Server {
     backend: hiredis::Context,
     queue: String,
 }
 
 impl Server {
+    /// Establish a connection to a server.
     pub fn connect(arguments: &Arguments) -> Result<Server> {
         Ok(Server {
             backend: match arguments.get::<String>("server").and_then(|s| Address::parse(&s)) {
@@ -25,6 +32,7 @@ impl Server {
         })
     }
 
+    /// Fetch a message from the server.
     pub fn receive(&mut self) -> Result<String> {
         use hiredis::Reply;
         match ok!(self.backend.command(&["BLPOP", &self.queue, "0"])) {

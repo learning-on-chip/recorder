@@ -1,3 +1,5 @@
+//! SQLite database.
+
 use arguments::Arguments;
 use sqlite;
 use std::{mem, thread};
@@ -10,6 +12,7 @@ pub use sqlite::Value;
 const FAIL_SLEEP_MS: u32 = 50;
 const FAIL_ATTEMPTS: usize = 10;
 
+/// An SQLite database.
 pub struct Database {
     #[allow(dead_code)]
     connection: sqlite::Connection,
@@ -17,6 +20,7 @@ pub struct Database {
 }
 
 impl Database {
+    /// Create a database.
     pub fn open(arguments: &Arguments, columns: &[(&str, Type)]) -> Result<Database> {
         use sql::prelude::*;
 
@@ -55,6 +59,7 @@ impl Database {
         Ok(Database { connection: connection, cursor: cursor })
     }
 
+    /// Write into the database.
     pub fn write(&mut self, values: &[Value]) -> Result<()> {
         let mut success = false;
         for _ in 0..FAIL_ATTEMPTS {
