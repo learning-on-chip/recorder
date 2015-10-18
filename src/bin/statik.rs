@@ -10,7 +10,7 @@ Usage: recorder static [options]
 Options:
     --config <path>          McPAT configuration file (required).
 
-    --database <path>        SQLite3 database (required).
+    --database <path>        SQLite database (required).
     --table <name>           Table for storing results (required).
 
     --caching                Enable caching of McPAT optimization results.

@@ -16,7 +16,7 @@ Options:
     --caching                Enable caching of McPAT optimization results.
     --server <host>:<port>   Redis server [default: 127.0.0.0:6379].
 
-    --database <path>        SQLite3 database (required).
+    --database <path>        SQLite database (required).
     --table <name>           Table for storing results (required).
 
     --help                   Display this message.
