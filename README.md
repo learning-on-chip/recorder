@@ -1,4 +1,4 @@
-# Recorder
+# Recorder [![Status][status-img]][status-url]
 
 Recorder is a tool for recording workload patterns.
 
@@ -7,3 +7,6 @@ Recorder is a tool for recording workload patterns.
 1. Fork the project.
 2. Implement your idea.
 3. Open a pull request.
+
+[status-img]: https://travis-ci.org/learning-on-chip/recorder.svg?branch=master
+[status-url]: https://travis-ci.org/learning-on-chip/recorder
