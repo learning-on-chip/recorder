@@ -14,3 +14,10 @@ impl Address {
         }
     }
 }
+
+impl Default for Address {
+    #[inline]
+    fn default() -> Address {
+        Address("127.0.0.1".to_string(), 6379)
+    }
+}

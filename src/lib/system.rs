@@ -2,7 +2,8 @@ use arguments::Arguments;
 use mcpat;
 use std::path::Path;
 
-use {Address, Result};
+use Result;
+use server::Address;
 
 /// A McPAT system.
 pub struct System {
@@ -25,17 +26,13 @@ impl System {
 
     /// Configure global parameters.
     pub fn setup(arguments: &Arguments) -> Result<()> {
-        use server::{DEFAULT_HOST, DEFAULT_PORT};
-
         mcpat::optimze_for_clock_rate(true);
-
         if arguments.get::<bool>("caching").unwrap_or(false) {
-            match arguments.get::<String>("server").and_then(|s| Address::parse(&s)) {
-                Some(Address(ref host, port)) => ok!(mcpat::caching::activate(host, port)),
-                _ => ok!(mcpat::caching::activate(DEFAULT_HOST, DEFAULT_PORT)),
-            }
+            let Address(host, port) = arguments.get::<String>("server")
+                                               .and_then(|s| Address::parse(&s))
+                                               .unwrap_or_else(|| Address::default());
+            ok!(mcpat::caching::activate(&host, port));
         }
-
         Ok(())
     }
 

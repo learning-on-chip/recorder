@@ -30,11 +30,9 @@ macro_rules! ok(
     );
 );
 
-mod address;
 mod system;
 
 pub mod database;
 pub mod server;
 
-pub use address::Address;
 pub use system::System;

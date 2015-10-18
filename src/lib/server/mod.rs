@@ -3,13 +3,11 @@
 use arguments::Arguments;
 use hiredis;
 
-use {Address, Result};
+use Result;
 
-/// The default Redis host name.
-pub const DEFAULT_HOST: &'static str = "127.0.0.1";
+mod address;
 
-/// The default Redis port number.
-pub const DEFAULT_PORT: usize = 6379;
+pub use self::address::Address;
 
 /// A Redis server.
 pub struct Server {
@@ -21,9 +19,11 @@ impl Server {
     /// Establish a connection to a server.
     pub fn connect(arguments: &Arguments) -> Result<Server> {
         Ok(Server {
-            backend: match arguments.get::<String>("server").and_then(|s| Address::parse(&s)) {
-                Some(Address(ref host, port)) => ok!(hiredis::connect(host, port)),
-                _ => ok!(hiredis::connect(DEFAULT_HOST, DEFAULT_PORT)),
+            backend: {
+                let Address(host, port) = arguments.get::<String>("server")
+                                                   .and_then(|s| Address::parse(&s))
+                                                   .unwrap_or_else(|| Address::default());
+                ok!(hiredis::connect(&host, port))
             },
             queue: match arguments.get::<String>("queue") {
                 Some(queue) => queue,
