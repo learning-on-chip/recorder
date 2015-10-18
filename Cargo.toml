@@ -23,3 +23,4 @@ log = "*"
 mcpat = { version = "*", features = ["caching"] }
 sql = "*"
 sqlite = "*"
+term = "*"
