@@ -1,3 +1,5 @@
+//! Recording of workload patterns.
+
 extern crate arguments;
 extern crate hiredis;
 extern crate mcpat;
