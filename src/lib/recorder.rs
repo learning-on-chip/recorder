@@ -1,11 +1,11 @@
-#[macro_use]
-extern crate log;
-
 extern crate arguments;
 extern crate hiredis;
 extern crate mcpat;
 extern crate sql;
 extern crate sqlite;
+
+#[macro_use]
+extern crate log;
 
 /// Raise an error.
 #[macro_export]
