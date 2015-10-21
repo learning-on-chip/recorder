@@ -1,5 +1,3 @@
-#![cfg_attr(test, allow(dead_code, unused_imports))]
-
 extern crate arguments;
 extern crate log;
 extern crate mcpat;
