@@ -2,14 +2,14 @@
 
 use arguments::Arguments;
 use sqlite;
-use std::{mem, thread};
+use std::{mem, thread, time};
 
 use Result;
 
 pub use sql::Type;
 pub use sqlite::Value;
 
-const FAIL_SLEEP_MS: u32 = 50;
+const FAIL_SLEEP_MS: u64 = 50;
 const FAIL_ATTEMPTS: usize = 10;
 
 /// An SQLite database.
@@ -35,7 +35,7 @@ impl Database {
         };
         ok!(connection.set_busy_handler(|_| {
             error!(target: "database", "Failed to execute a query. Trying again...");
-            thread::sleep_ms(FAIL_SLEEP_MS);
+            thread::sleep(time::Duration::from_millis(FAIL_SLEEP_MS));
             true
         }));
 
@@ -69,7 +69,7 @@ impl Database {
                 break;
             }
             error!(target: "database", "Failed to insert a record. Trying again...");
-            thread::sleep_ms(FAIL_SLEEP_MS);
+            thread::sleep(time::Duration::from_millis(FAIL_SLEEP_MS));
         }
         if !success {
             raise!("cannot write into the database");
