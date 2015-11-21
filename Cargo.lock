@@ -7,7 +7,7 @@ dependencies = [
  "log 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "mcpat 0.8.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "sql 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "sqlite 0.19.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sqlite 0.20.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "term 0.2.13 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -99,7 +99,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "sqlite"
-version = "0.19.7"
+version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "libc 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
