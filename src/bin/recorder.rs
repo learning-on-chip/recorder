@@ -44,7 +44,7 @@ fn help(message: &str) -> ! {
 
 #[allow(unused_must_use)]
 fn fail(error: Error) -> ! {
-    use std::io::{stderr, Write};
+    use std::io::Write;
     if let Some(mut output) = term::stderr() {
         output.fg(term::color::RED);
         output.write_all(format!("Error: {}.\n", error).as_bytes());
