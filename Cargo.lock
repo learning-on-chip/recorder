@@ -2,35 +2,40 @@
 name = "recorder"
 version = "0.0.1"
 dependencies = [
- "arguments 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "hiredis 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "arguments 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hiredis 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "mcpat 0.8.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "sql 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "sqlite 0.21.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "mcpat 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sql 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sqlite 0.22.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "term 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "arguments"
-version = "0.5.1"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "options 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "options 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
+name = "gcc"
+version = "0.3.28"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "hiredis"
-version = "0.2.4"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "hiredis-sys 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hiredis-sys 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.12 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "hiredis-sys"
-version = "0.3.2"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "libc 0.2.12 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -57,26 +62,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "mcpat"
-version = "0.8.3"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "hiredis 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hiredis 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "mcpat-sys 0.7.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "mcpat-sys 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "mcpat-sys"
-version = "0.7.1"
+version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "hiredis-sys 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hiredis-sys 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.12 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "options"
-version = "0.4.0"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -86,33 +91,34 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "sql"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "sqlite"
-version = "0.21.2"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "libc 0.2.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "sqlite3-sys 0.9.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sqlite3-sys 0.10.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "sqlite3-src"
-version = "0.1.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
+ "gcc 0.3.28 (registry+https://github.com/rust-lang/crates.io-index)",
  "pkg-config 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "sqlite3-sys"
-version = "0.9.3"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "libc 0.2.12 (registry+https://github.com/rust-lang/crates.io-index)",
- "sqlite3-src 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sqlite3-src 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

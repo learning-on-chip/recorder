@@ -26,7 +26,7 @@ impl System {
 
     /// Configure global parameters.
     pub fn setup(arguments: &Arguments) -> Result<()> {
-        mcpat::optimze_for_clock_rate(true);
+        mcpat::optimize_for_clock_rate(true);
         if arguments.get::<bool>("caching").unwrap_or(false) {
             let Address(host, port) = arguments.get::<String>("server")
                                                .and_then(|s| Address::parse(&s))
