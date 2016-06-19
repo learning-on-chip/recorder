@@ -28,6 +28,7 @@ fn main() {
         if let Some(mut output) = term::stderr() {
             output.fg(term::color::RED);
             output.write_fmt(format_args!("Error: {}.\n", error));
+            output.reset();
         }
         std::process::exit(1);
     }
