@@ -26,7 +26,8 @@ pub fn execute(arguments: &Arguments) -> Result<()> {
     use mcpat::Component;
 
     if arguments.get::<bool>("help").unwrap_or(false) {
-        ::help(USAGE);
+        println!("{}", USAGE.trim());
+        return Ok(());
     }
 
     try!(System::setup(arguments));

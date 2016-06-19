@@ -2,6 +2,16 @@ use log::{self, Log, LogLevel, LogLevelFilter, LogMetadata, LogRecord};
 
 pub struct Logger;
 
+impl Logger {
+    #[allow(unused_must_use)]
+    pub fn install() {
+        log::set_logger(|max_log_level| {
+            max_log_level.set(LogLevelFilter::Info);
+            Box::new(Logger)
+        });
+    }
+}
+
 impl Log for Logger {
     fn enabled(&self, metadata: &LogMetadata) -> bool {
         metadata.level() <= LogLevel::Info
@@ -12,11 +22,4 @@ impl Log for Logger {
             println!("[{:10}] {}", record.target(), record.args());
         }
     }
-}
-
-pub fn setup() {
-    let _ = log::set_logger(|max_log_level| {
-        max_log_level.set(LogLevelFilter::Info);
-        Box::new(Logger)
-    });
 }
