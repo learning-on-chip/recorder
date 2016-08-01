@@ -1,5 +1,6 @@
 language: rust
 sudo: false
+
 rust:
   - stable
   - beta
@@ -10,11 +11,10 @@ script:
   - cargo run -- --help
 
 after_success:
-  - curl https://learning-on-chip.github.io/travis/after_success.sh | bash
+  - curl https://learning-on-chip.github.io/travis/documentation.sh | bash
 
 env:
   global:
-    - RUSTDOC_VERSION=stable
     - secure: nxavo3oNWCPiJqIDygdsCsNWqwebagnxIk3R3rz5ZQ+tYBe7wEKE6Ba7Ge8wMLdV/KVh4zhBAPajebBerMhJ1q87lTyL4y9Q8/4hhFMSbdmCOFJUGxT1dF1Cd/74WGP2Q62kNFs6r9Fv3UcUWypY0uEPQc9cMLuf/UUS/P1SsquzAcpIPwEfugRxdmQyNN66mM03otJXU/XuS6V022H2KJZV/WnB7WPZriyOCiy1nD2w2C/5bvIldRBTyE9EQ1OOMy49VtYfV22PQfRaBDTjxooi4d3T/HZHyPagQBndJ9361zetE6JS2+/JmPOYiD0BbeaONBLFfH37+gCihzbKWvcl4KFz6a6SWnGD5YQo7zLgrwZ96E2BBBGVbtJfmesItnTY58z8/rLa5bHxEaJEAkYo56BFoctGqMmxRiY/0VPY3tr5SK8tb9LQqgl89XIBu1r74RX+6Vq2GP5FsrmU4ehysJ8+muZ43RDbaRgVtdg2OMiKbJDVjVc6ghAjzaN1DVYKxtiP9prgYr7T0M+Q0CQpksbssqEYAG+aGE9xbnkarx5c0k8xOuhb4ITqF04tOjffg2Bi5PBoXD4kElh6H3GeRQDB8nF35RLW8zxAtsJtkh915jzGyGZDCuoWxBqrisqUUcJ2joQHw3q4MOmS0CVSlc1U0Xw7Ozy7FnwbGAw=
 
 notifications:
