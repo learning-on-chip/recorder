@@ -21,7 +21,7 @@ dependencies = [
 
 [[package]]
 name = "gcc"
-version = "0.3.32"
+version = "0.3.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -108,7 +108,7 @@ name = "sqlite3-src"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "gcc 0.3.32 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gcc 0.3.35 (registry+https://github.com/rust-lang/crates.io-index)",
  "pkg-config 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -142,7 +142,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [metadata]
 "checksum arguments 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)" = "b8eeba4abcca498200dfc548cb7795643019bacae41e4aec83b980528c5fe8f5"
-"checksum gcc 0.3.32 (registry+https://github.com/rust-lang/crates.io-index)" = "dcb000abd6df9df4c637f75190297ebe56c1d7e66b56bbf3b4aa7aece15f61a2"
+"checksum gcc 0.3.35 (registry+https://github.com/rust-lang/crates.io-index)" = "91ecd03771effb0c968fd6950b37e89476a578aaf1c70297d8e92b6516ec3312"
 "checksum hiredis 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "168acb263298b1975f84ce37307db90f9661669e60a78e7fbdd250feb1e13a17"
 "checksum hiredis-sys 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "94004a09b15041a27caa70e020b9677fdc4d89700bc6e27b45b030628b55ca79"
 "checksum kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "7507624b29483431c0ba2d82aece8ca6cdba9382bff4ddd0f7490560c056098d"
