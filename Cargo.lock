@@ -8,7 +8,7 @@ dependencies = [
  "mcpat 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sql 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "sqlite 0.23.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "term 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "term 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -21,7 +21,7 @@ dependencies = [
 
 [[package]]
 name = "gcc"
-version = "0.3.42"
+version = "0.3.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -108,7 +108,7 @@ name = "sqlite3-src"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "gcc 0.3.42 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gcc 0.3.43 (registry+https://github.com/rust-lang/crates.io-index)",
  "pkg-config 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -123,7 +123,7 @@ dependencies = [
 
 [[package]]
 name = "term"
-version = "0.4.4"
+version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -142,7 +142,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [metadata]
 "checksum arguments 0.6.2 (registry+https://github.com/rust-lang/crates.io-index)" = "ef446ba94fd640b51609759f5280d5d2927386b58a1a4946594b4145f5d4a4c8"
-"checksum gcc 0.3.42 (registry+https://github.com/rust-lang/crates.io-index)" = "291055c78f59ca3d84c99026c9501c469413d386bb46be1e1cf1d285cd1db3b0"
+"checksum gcc 0.3.43 (registry+https://github.com/rust-lang/crates.io-index)" = "c07c758b972368e703a562686adb39125707cc1ef3399da8c019fc6c2498a75d"
 "checksum hiredis 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "b25a6c67a1b8a8333e8bf392bd454f3d662409f4f311e874100a0d2799805053"
 "checksum hiredis-sys 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)" = "236458586a3ffa2d4979bd73c0b86b83297ebbebba172e1607ecf2151f8aa958"
 "checksum kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "7507624b29483431c0ba2d82aece8ca6cdba9382bff4ddd0f7490560c056098d"
@@ -156,6 +156,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum sqlite 0.23.3 (registry+https://github.com/rust-lang/crates.io-index)" = "bb1d137aaac193337c71908b7e8464c59091d45dd304885e3e2c7bd626f83717"
 "checksum sqlite3-src 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)" = "4fcdd654f7498af4f5a21805bd5d4183d047f1b0e033383ded53fbff4f8a96a7"
 "checksum sqlite3-sys 0.11.3 (registry+https://github.com/rust-lang/crates.io-index)" = "863df8fc90fec63dd816e73f2cb1461cfe8fec660519029af4f2a28c404fca96"
-"checksum term 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)" = "3deff8a2b3b6607d6d7cc32ac25c0b33709453ca9cceac006caac51e963cf94a"
+"checksum term 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)" = "d168af3930b369cfe245132550579d47dfd873d69470755a19c2c6568dbbd989"
 "checksum winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)" = "167dc9d6949a9b857f3451275e911c3f44255842c1f7a76f33c55103a909087a"
 "checksum winapi-build 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "2d315eee3b34aca4797b2da6b13ed88266e6d612562a0c46390af8299fc699bc"
