@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `system_NoC` struct in crate `mcpat_sys`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, system_NoC">
+
+    <title>mcpat_sys::system_NoC - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'>Struct system_NoC</p><div class="block items"><ul><li><a href="#fields">Fields</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='index.html'>mcpat_sys</a></p><script>window.sidebarCurrent = {name: 'system_NoC', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>mcpat_sys</a>::<wbr><a class="struct" href=''>system_NoC</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/mcpat_sys/xml_parse.rs.html#404-431' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'><div class="docblock attributes">#[repr(C)]
+</div>pub struct system_NoC {
+    pub clockrate: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub kind: <a class="type" href="../libc/unix/notbsd/linux/other/b64/x86_64/type.c_char.html" title="type libc::unix::notbsd::linux::other::b64::x86_64::c_char">c_bool</a>,
+    pub has_global_link: <a class="type" href="../libc/unix/notbsd/linux/other/b64/x86_64/type.c_char.html" title="type libc::unix::notbsd::linux::other::b64::x86_64::c_char">c_bool</a>,
+    pub topology: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../libc/unix/notbsd/linux/other/b64/x86_64/type.c_char.html" title="type libc::unix::notbsd::linux::other::b64::x86_64::c_char">c_char</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 20]</a>,
+    pub horizontal_nodes: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub vertical_nodes: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub link_throughput: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub link_latency: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub input_ports: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub output_ports: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub virtual_channel_per_port: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub flit_bits: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub input_buffer_entries_per_vc: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub ports_of_input_buffer: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 20]</a>,
+    pub dual_pump: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub number_of_crossbars: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub crossbar_type: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../libc/unix/notbsd/linux/other/b64/x86_64/type.c_char.html" title="type libc::unix::notbsd::linux::other::b64::x86_64::c_char">c_char</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 20]</a>,
+    pub crosspoint_type: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../libc/unix/notbsd/linux/other/b64/x86_64/type.c_char.html" title="type libc::unix::notbsd::linux::other::b64::x86_64::c_char">c_char</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 20]</a>,
+    pub xbar0: <a class="struct" href="../mcpat_sys/struct.xbar0_systemNoC.html" title="struct mcpat_sys::xbar0_systemNoC">xbar0_systemNoC</a>,
+    pub arbiter_type: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a>,
+    pub chip_coverage: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a>,
+    pub vdd: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a>,
+    pub power_gating_vcc: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a>,
+    pub total_accesses: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a>,
+    pub duty_cycle: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a>,
+    pub route_over_perc: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a>,
+}</pre><h2 id='fields' class='fields section-header'>
+                       <a href='#fields'>Fields</a></h2><span id='structfield.clockrate' class="structfield">
+                           <span id='clockrate.v' class='invisible'>
+                           <code>clockrate: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.kind' class="structfield">
+                           <span id='kind.v' class='invisible'>
+                           <code>kind: <a class="type" href="../libc/unix/notbsd/linux/other/b64/x86_64/type.c_char.html" title="type libc::unix::notbsd::linux::other::b64::x86_64::c_char">c_bool</a></code>
+                           </span></span><span id='structfield.has_global_link' class="structfield">
+                           <span id='has_global_link.v' class='invisible'>
+                           <code>has_global_link: <a class="type" href="../libc/unix/notbsd/linux/other/b64/x86_64/type.c_char.html" title="type libc::unix::notbsd::linux::other::b64::x86_64::c_char">c_bool</a></code>
+                           </span></span><span id='structfield.topology' class="structfield">
+                           <span id='topology.v' class='invisible'>
+                           <code>topology: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../libc/unix/notbsd/linux/other/b64/x86_64/type.c_char.html" title="type libc::unix::notbsd::linux::other::b64::x86_64::c_char">c_char</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 20]</a></code>
+                           </span></span><span id='structfield.horizontal_nodes' class="structfield">
+                           <span id='horizontal_nodes.v' class='invisible'>
+                           <code>horizontal_nodes: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.vertical_nodes' class="structfield">
+                           <span id='vertical_nodes.v' class='invisible'>
+                           <code>vertical_nodes: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.link_throughput' class="structfield">
+                           <span id='link_throughput.v' class='invisible'>
+                           <code>link_throughput: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.link_latency' class="structfield">
+                           <span id='link_latency.v' class='invisible'>
+                           <code>link_latency: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.input_ports' class="structfield">
+                           <span id='input_ports.v' class='invisible'>
+                           <code>input_ports: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.output_ports' class="structfield">
+                           <span id='output_ports.v' class='invisible'>
+                           <code>output_ports: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.virtual_channel_per_port' class="structfield">
+                           <span id='virtual_channel_per_port.v' class='invisible'>
+                           <code>virtual_channel_per_port: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.flit_bits' class="structfield">
+                           <span id='flit_bits.v' class='invisible'>
+                           <code>flit_bits: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.input_buffer_entries_per_vc' class="structfield">
+                           <span id='input_buffer_entries_per_vc.v' class='invisible'>
+                           <code>input_buffer_entries_per_vc: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.ports_of_input_buffer' class="structfield">
+                           <span id='ports_of_input_buffer.v' class='invisible'>
+                           <code>ports_of_input_buffer: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 20]</a></code>
+                           </span></span><span id='structfield.dual_pump' class="structfield">
+                           <span id='dual_pump.v' class='invisible'>
+                           <code>dual_pump: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.number_of_crossbars' class="structfield">
+                           <span id='number_of_crossbars.v' class='invisible'>
+                           <code>number_of_crossbars: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.crossbar_type' class="structfield">
+                           <span id='crossbar_type.v' class='invisible'>
+                           <code>crossbar_type: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../libc/unix/notbsd/linux/other/b64/x86_64/type.c_char.html" title="type libc::unix::notbsd::linux::other::b64::x86_64::c_char">c_char</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 20]</a></code>
+                           </span></span><span id='structfield.crosspoint_type' class="structfield">
+                           <span id='crosspoint_type.v' class='invisible'>
+                           <code>crosspoint_type: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../libc/unix/notbsd/linux/other/b64/x86_64/type.c_char.html" title="type libc::unix::notbsd::linux::other::b64::x86_64::c_char">c_char</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 20]</a></code>
+                           </span></span><span id='structfield.xbar0' class="structfield">
+                           <span id='xbar0.v' class='invisible'>
+                           <code>xbar0: <a class="struct" href="../mcpat_sys/struct.xbar0_systemNoC.html" title="struct mcpat_sys::xbar0_systemNoC">xbar0_systemNoC</a></code>
+                           </span></span><span id='structfield.arbiter_type' class="structfield">
+                           <span id='arbiter_type.v' class='invisible'>
+                           <code>arbiter_type: <a class="type" href="../libc/type.c_int.html" title="type libc::c_int">c_int</a></code>
+                           </span></span><span id='structfield.chip_coverage' class="structfield">
+                           <span id='chip_coverage.v' class='invisible'>
+                           <code>chip_coverage: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a></code>
+                           </span></span><span id='structfield.vdd' class="structfield">
+                           <span id='vdd.v' class='invisible'>
+                           <code>vdd: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a></code>
+                           </span></span><span id='structfield.power_gating_vcc' class="structfield">
+                           <span id='power_gating_vcc.v' class='invisible'>
+                           <code>power_gating_vcc: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a></code>
+                           </span></span><span id='structfield.total_accesses' class="structfield">
+                           <span id='total_accesses.v' class='invisible'>
+                           <code>total_accesses: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a></code>
+                           </span></span><span id='structfield.duty_cycle' class="structfield">
+                           <span id='duty_cycle.v' class='invisible'>
+                           <code>duty_cycle: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a></code>
+                           </span></span><span id='structfield.route_over_perc' class="structfield">
+                           <span id='route_over_perc.v' class='invisible'>
+                           <code>route_over_perc: <a class="type" href="../libc/type.c_double.html" title="type libc::c_double">c_double</a></code>
+                           </span></span>
+            <h2 id='implementations' class='section-header'>
+              <a href='#implementations'>Trait Implementations</a>
+            </h2>
+        <h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="struct" href="../mcpat_sys/struct.system_NoC.html" title="struct mcpat_sys::system_NoC">system_NoC</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/mcpat_sys/xml_parse.rs.html#402' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="struct" href="../mcpat_sys/struct.system_NoC.html" title="struct mcpat_sys::system_NoC">system_NoC</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/mcpat_sys/xml_parse.rs.html#402' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self)</code></span><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/clone.rs.html#111-113' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="struct" href="../mcpat_sys/struct.system_NoC.html" title="struct mcpat_sys::system_NoC">system_NoC</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/mcpat_sys/xml_parse.rs.html#402' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="struct" href="../mcpat_sys/struct.system_NoC.html" title="struct mcpat_sys::system_NoC">system_NoC</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/mcpat_sys/xml_parse.rs.html#402' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class="method"><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/mcpat_sys/xml_parse.rs.html#402' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "mcpat_sys";
+    </script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Type","A data type."],["Value","A typed value."]],"struct":[["Database","An SQLite database."]]});
